@@ -1,0 +1,6 @@
+{"datasets":
+[{"name":"Regione Emilia Romagna - Precariato Giovanile",
+  "url":"https://dbgroup.unimo.it/politichegiovanili/sparql"},
+ {"name":"Senato Italiano",
+  "url":"http://dati.senato.it/sparql"}]
+}

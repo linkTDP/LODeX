@@ -1,0 +1,515 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://purl.org/linked-data/cube#DataSet> a rdfs:Class .
+
+<http://purl.org/linked-data/cube#DataStructureDefinition> a rdfs:Class .
+
+<http://purl.org/linked-data/cube#Observation> a rdfs:Class .
+
+<http://purl.org/net/opmv/ns#Artifact> a rdfs:Class .
+
+<http://purl.org/net/opmv/ns#Process> a rdfs:Class .
+
+<http://purl.org/net/opmv/types/google-refine#OperationDescription> a rdfs:Class .
+
+<http://purl.org/net/opmv/types/google-refine#Process> a rdfs:Class .
+
+<http://purl.org/net/opmv/types/google-refine#Project> a rdfs:Class .
+
+<http://purl.org/net/opmv/types/gridworks#Process> a rdfs:Class .
+
+<http://purl.org/net/opmv/types/gridworks#Project> a rdfs:Class .
+
+<http://rdfs.org/ns/void#Dataset> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/CivilServicePost> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/Department> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/DeputyDirector> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/Director> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/DirectorGeneral> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/Minister> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/MinisterialDepartment> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/PermanentSecretary> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/PublicBody> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/intervals/CalendarDay> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/parliament/Chamber> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/parliament/Leader> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/parliament/PoliticalParty> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/parliament/Seat> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/public-body/Department> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/reference/URIset> a rdfs:Class .
+
+<http://reference.data.gov.uk/def/reference/uriSet> a rdfs:Class ;
+    rdfs:domain <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/Minister>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://www.w3.org/ns/org#Membership>,
+        <http://www.w3.org/ns/org#Organization>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet> .
+
+<http://reference.data.gov.uk/id/department/defra/grade/> a rdfs:Class .
+
+<http://reference.data.gov.uk/id/public-body/national-gallery/grade/1> a rdfs:Class .
+
+<http://www.w3.org/2004/02/skos/core#ConceptScheme> a rdfs:Class .
+
+<http://www.w3.org/2006/time#Interval> a rdfs:Class .
+
+<http://www.w3.org/ns/org#ChangeEvent> a rdfs:Class .
+
+<http://www.w3.org/ns/org#Membership> a rdfs:Class .
+
+<http://www.w3.org/ns/org#Organization> a rdfs:Class .
+
+<http://www.w3.org/ns/org#OrganizationalUnit> a rdfs:Class .
+
+<http://www.w3.org/ns/org#Role> a rdfs:Class .
+
+<http://xmlns.com/foaf/0.1/Document> a rdfs:Class .
+
+<http://xmlns.com/foaf/0.1/Person> a rdfs:Class .
+
+<http://purl.org/dc/terms/created> rdfs:domain <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://www.w3.org/2004/02/skos/core#ConceptScheme>,
+        <http://xmlns.com/foaf/0.1/Document> ;
+    rdfs:range rdfs:Literal .
+
+<http://purl.org/dc/terms/description> rdfs:domain <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://www.w3.org/ns/org#ChangeEvent>,
+        <http://www.w3.org/ns/org#Role>,
+        <http://xmlns.com/foaf/0.1/Document>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+
+<http://purl.org/dc/terms/format> rdfs:domain <http://xmlns.com/foaf/0.1/Document> ;
+    rdfs:range <http://www.w3.org/2006/time#Interval> .
+
+<http://purl.org/dc/terms/hasFormat> rdfs:domain <http://purl.org/net/opmv/ns#Artifact>,
+        <http://rdfs.org/ns/void#Dataset> ;
+    rdfs:range <http://xmlns.com/foaf/0.1/Document> .
+
+<http://purl.org/dc/terms/isFormatOf> rdfs:domain <http://xmlns.com/foaf/0.1/Document> ;
+    rdfs:range <http://rdfs.org/ns/void#Dataset> .
+
+<http://purl.org/dc/terms/isReplacedBy> rdfs:domain <http://rdfs.org/ns/void#Dataset> ;
+    rdfs:range <http://rdfs.org/ns/void#Dataset> .
+
+<http://purl.org/dc/terms/replaces> rdfs:domain <http://rdfs.org/ns/void#Dataset> ;
+    rdfs:range <http://rdfs.org/ns/void#Dataset> .
+
+<http://purl.org/dc/terms/source> rdfs:domain <http://purl.org/linked-data/cube#DataSet> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact> .
+
+<http://purl.org/dc/terms/temporal> rdfs:domain <http://purl.org/linked-data/cube#DataSet>,
+        <http://purl.org/net/opmv/ns#Artifact> ;
+    rdfs:range <http://reference.data.gov.uk/def/intervals/CalendarDay>,
+        <http://www.w3.org/2006/time#Interval> .
+
+<http://purl.org/dc/terms/title> rdfs:domain <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+    rdfs:range rdfs:Literal .
+
+<http://purl.org/linked-data/cube#dataSet> rdfs:domain <http://purl.org/linked-data/cube#Observation> ;
+    rdfs:range <http://purl.org/linked-data/cube#DataSet> .
+
+<http://purl.org/linked-data/cube#structure> rdfs:domain <http://purl.org/linked-data/cube#DataSet> ;
+    rdfs:range <http://purl.org/linked-data/cube#DataStructureDefinition> .
+
+<http://purl.org/net/opmv/ns#wasGeneratedBy> rdfs:domain <http://purl.org/net/opmv/ns#Artifact> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Process>,
+        <http://purl.org/net/opmv/types/google-refine#Process>,
+        <http://purl.org/net/opmv/types/gridworks#Process> .
+
+<http://purl.org/net/opmv/types/common#usedData> rdfs:domain <http://purl.org/net/opmv/types/google-refine#Process>,
+        <http://purl.org/net/opmv/types/gridworks#Process> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact> .
+
+<http://purl.org/net/opmv/types/google-refine#operationDescription> rdfs:domain <http://purl.org/net/opmv/ns#Process>,
+        <http://purl.org/net/opmv/types/google-refine#Process> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact>,
+        <http://purl.org/net/opmv/types/google-refine#OperationDescription> .
+
+<http://purl.org/net/opmv/types/google-refine#wasCreatedFrom> rdfs:domain <http://purl.org/net/opmv/ns#Artifact> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact> .
+
+<http://purl.org/net/opmv/types/google-refine#wasExportedFrom> rdfs:domain <http://purl.org/linked-data/cube#DataSet>,
+        <http://purl.org/net/opmv/ns#Artifact> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact>,
+        <http://purl.org/net/opmv/types/google-refine#Project> .
+
+<http://purl.org/net/opmv/types/gridworks#operationDescription> rdfs:domain <http://purl.org/net/opmv/types/gridworks#Process> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact> .
+
+<http://purl.org/net/opmv/types/gridworks#wasCreatedFrom> rdfs:domain <http://purl.org/net/opmv/ns#Artifact> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact> .
+
+<http://purl.org/net/opmv/types/gridworks#wasExportedFrom> rdfs:domain <http://purl.org/linked-data/cube#DataSet>,
+        <http://purl.org/net/opmv/ns#Artifact>,
+        <http://rdfs.org/ns/void#Dataset> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact>,
+        <http://purl.org/net/opmv/types/gridworks#Project> .
+
+<http://rdfs.org/ns/void#dataDump> rdfs:domain <http://purl.org/net/opmv/ns#Artifact>,
+        <http://rdfs.org/ns/void#Dataset> ;
+    rdfs:range <http://xmlns.com/foaf/0.1/Document> .
+
+<http://rdfs.org/ns/void#exampleResource> rdfs:domain <http://purl.org/linked-data/cube#DataSet>,
+        <http://purl.org/net/opmv/ns#Artifact>,
+        <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://www.w3.org/2004/02/skos/core#ConceptScheme>,
+        <http://xmlns.com/foaf/0.1/Document> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/Minister>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://www.w3.org/ns/org#Organization>,
+        <http://xmlns.com/foaf/0.1/Person> .
+
+<http://rdfs.org/ns/void#subset> rdfs:domain <http://purl.org/net/opmv/ns#Artifact>,
+        <http://rdfs.org/ns/void#Dataset> ;
+    rdfs:range <http://purl.org/net/opmv/ns#Artifact>,
+        <http://rdfs.org/ns/void#Dataset>,
+        <http://xmlns.com/foaf/0.1/Document> .
+
+<http://rdfs.org/ns/void#uriRegexPattern> rdfs:domain <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet> ;
+    rdfs:range rdfs:Literal .
+
+<http://reference.data.gov.uk/def/central-government/hasPost> rdfs:domain <http://www.w3.org/ns/org#OrganizationalUnit> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/> .
+
+<http://reference.data.gov.uk/def/central-government/heldBy> rdfs:domain <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/> ;
+    rdfs:range <http://xmlns.com/foaf/0.1/Person> .
+
+<http://reference.data.gov.uk/def/central-government/holdsMinisterialPost> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Minister> .
+
+<http://reference.data.gov.uk/def/central-government/holdsPost> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/> .
+
+<http://reference.data.gov.uk/def/central-government/ministerOf> rdfs:domain <http://reference.data.gov.uk/def/central-government/Minister> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://www.w3.org/ns/org#Organization> .
+
+<http://reference.data.gov.uk/def/central-government/parentDepartment> rdfs:domain <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://www.w3.org/ns/org#Organization> .
+
+<http://reference.data.gov.uk/def/central-government/postIn> rdfs:domain <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/>,
+        <http://reference.data.gov.uk/id/public-body/national-gallery/grade/1> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://www.w3.org/ns/org#Organization>,
+        <http://www.w3.org/ns/org#OrganizationalUnit> .
+
+<http://reference.data.gov.uk/def/central-government/relatedBody> rdfs:domain <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://www.w3.org/ns/org#Organization> .
+
+<http://reference.data.gov.uk/def/organogram/date> rdfs:domain <http://purl.org/linked-data/cube#Observation> ;
+    rdfs:range <http://reference.data.gov.uk/def/intervals/CalendarDay> .
+
+<http://reference.data.gov.uk/def/organogram/post> rdfs:domain <http://purl.org/linked-data/cube#Observation> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/> .
+
+<http://reference.data.gov.uk/def/organogram/salaryCostOfReports> rdfs:domain <http://purl.org/linked-data/cube#Observation> ;
+    rdfs:range rdfs:Literal .
+
+<http://reference.data.gov.uk/def/parliament/holdsLeadership> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://reference.data.gov.uk/def/parliament/PoliticalParty> .
+
+<http://reference.data.gov.uk/def/parliament/holdsSeat> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://reference.data.gov.uk/def/parliament/Seat> .
+
+<http://reference.data.gov.uk/def/parliament/memberOf> rdfs:domain <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://reference.data.gov.uk/def/parliament/Chamber> .
+
+<http://reference.data.gov.uk/def/parliament/partyLeaderOf> rdfs:domain <http://reference.data.gov.uk/def/parliament/Leader> ;
+    rdfs:range <http://reference.data.gov.uk/def/parliament/PoliticalParty> .
+
+<http://reference.data.gov.uk/def/parliament/partyMemberOf> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://reference.data.gov.uk/def/parliament/PoliticalParty> .
+
+rdfs:comment rdfs:domain <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://reference.data.gov.uk/id/public-body/national-gallery/grade/1>,
+        <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range rdfs:Literal .
+
+rdfs:label rdfs:domain <http://purl.org/net/opmv/ns#Artifact>,
+        <http://purl.org/net/opmv/types/gridworks#Project>,
+        <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/Minister>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/intervals/CalendarDay>,
+        <http://reference.data.gov.uk/def/parliament/Leader>,
+        <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://reference.data.gov.uk/id/department/defra/grade/>,
+        <http://reference.data.gov.uk/id/public-body/national-gallery/grade/1>,
+        <http://www.w3.org/2004/02/skos/core#ConceptScheme>,
+        <http://www.w3.org/2006/time#Interval>,
+        <http://www.w3.org/ns/org#Membership>,
+        <http://www.w3.org/ns/org#Organization>,
+        <http://www.w3.org/ns/org#OrganizationalUnit>,
+        <http://www.w3.org/ns/org#Role>,
+        <http://xmlns.com/foaf/0.1/Document>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#altLabel> rdfs:domain <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/Minister>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#hasTopConcept> rdfs:domain <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+    rdfs:range <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://www.w3.org/ns/org#Role> .
+
+<http://www.w3.org/2004/02/skos/core#notation> rdfs:domain <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/>,
+        <http://reference.data.gov.uk/id/public-body/national-gallery/grade/1> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#note> rdfs:domain <http://www.w3.org/ns/org#Role> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#prefLabel> rdfs:domain <http://rdfs.org/ns/void#Dataset>,
+        <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/Minister>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/parliament/PoliticalParty>,
+        <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://www.w3.org/2004/02/skos/core#ConceptScheme>,
+        <http://www.w3.org/ns/org#Organization>,
+        <http://www.w3.org/ns/org#Role>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#topConceptOf> rdfs:domain <http://reference.data.gov.uk/def/parliament/Seat>,
+        <http://www.w3.org/ns/org#Role> ;
+    rdfs:range <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+
+<http://www.w3.org/ns/org#changedBy> rdfs:domain <http://reference.data.gov.uk/def/public-body/Department> ;
+    rdfs:range <http://www.w3.org/ns/org#ChangeEvent> .
+
+<http://www.w3.org/ns/org#hasMembership> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://www.w3.org/ns/org#Membership> .
+
+<http://www.w3.org/ns/org#hasUnit> rdfs:domain <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range <http://www.w3.org/ns/org#OrganizationalUnit> .
+
+<http://www.w3.org/ns/org#member> rdfs:domain <http://www.w3.org/ns/org#Membership> ;
+    rdfs:range <http://xmlns.com/foaf/0.1/Person> .
+
+<http://www.w3.org/ns/org#memberDuring> rdfs:domain <http://www.w3.org/ns/org#Membership> ;
+    rdfs:range <http://www.w3.org/2006/time#Interval> .
+
+<http://www.w3.org/ns/org#organization> rdfs:domain <http://www.w3.org/ns/org#Membership> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Minister>,
+        <http://reference.data.gov.uk/def/parliament/Chamber>,
+        <http://reference.data.gov.uk/def/parliament/PoliticalParty> .
+
+<http://www.w3.org/ns/org#originalOrganization> rdfs:domain <http://www.w3.org/ns/org#ChangeEvent> ;
+    rdfs:range <http://reference.data.gov.uk/def/public-body/Department> .
+
+<http://www.w3.org/ns/org#reportsTo> rdfs:domain <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/id/department/defra/grade/> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary> .
+
+<http://www.w3.org/ns/org#resultedFrom> rdfs:domain <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range <http://www.w3.org/ns/org#ChangeEvent> .
+
+<http://www.w3.org/ns/org#resultingOrganization> rdfs:domain <http://www.w3.org/ns/org#ChangeEvent> ;
+    rdfs:range <http://www.w3.org/ns/org#Organization> .
+
+<http://www.w3.org/ns/org#role> rdfs:domain <http://www.w3.org/ns/org#Membership>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://www.w3.org/2004/02/skos/core#ConceptScheme>,
+        <http://www.w3.org/ns/org#Role> .
+
+<http://www.w3.org/ns/org#unitOf> rdfs:domain <http://www.w3.org/ns/org#OrganizationalUnit> ;
+    rdfs:range <http://www.w3.org/ns/org#Organization> .
+
+<http://xmlns.com/foaf/0.1/firstName> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+
+<http://xmlns.com/foaf/0.1/isPrimaryTopicOf> rdfs:domain <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://www.w3.org/ns/org#Organization> ;
+    rdfs:range <http://rdfs.org/ns/void#Dataset>,
+        <http://xmlns.com/foaf/0.1/Document> .
+
+<http://xmlns.com/foaf/0.1/lastName> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+
+<http://xmlns.com/foaf/0.1/name> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+
+<http://xmlns.com/foaf/0.1/page> rdfs:domain <http://reference.data.gov.uk/def/central-government/AssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/CivilServicePost>,
+        <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/central-government/DeputyDirector>,
+        <http://reference.data.gov.uk/def/central-government/DeputyParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/Director>,
+        <http://reference.data.gov.uk/def/central-government/DirectorGeneral>,
+        <http://reference.data.gov.uk/def/central-government/MinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/NonMinisterialDepartment>,
+        <http://reference.data.gov.uk/def/central-government/ParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/central-government/PermanentSecretary>,
+        <http://reference.data.gov.uk/def/central-government/PublicBody>,
+        <http://reference.data.gov.uk/def/central-government/SeniorAssistantParliamentaryCounsel>,
+        <http://reference.data.gov.uk/def/public-body/Department>,
+        <http://reference.data.gov.uk/id/department/defra/grade/>,
+        <http://reference.data.gov.uk/id/public-body/national-gallery/grade/1>,
+        <http://www.w3.org/ns/org#Organization>,
+        <http://www.w3.org/ns/org#OrganizationalUnit>,
+        <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range <http://purl.org/linked-data/cube#DataSet>,
+        <http://purl.org/net/opmv/ns#Artifact> .
+
+<http://xmlns.com/foaf/0.1/primaryTopic> rdfs:domain <http://rdfs.org/ns/void#Dataset>,
+        <http://xmlns.com/foaf/0.1/Document> ;
+    rdfs:range <http://reference.data.gov.uk/def/central-government/Department>,
+        <http://reference.data.gov.uk/def/reference/URIset>,
+        <http://reference.data.gov.uk/def/reference/uriSet>,
+        <http://www.w3.org/2004/02/skos/core#ConceptScheme>,
+        <http://www.w3.org/ns/org#Organization> .
+
+<http://xmlns.com/foaf/0.1/title> rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range rdfs:Literal .
+

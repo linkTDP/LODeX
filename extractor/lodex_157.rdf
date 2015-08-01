@@ -1,0 +1,194 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://reegle.info/schema#CountryProfile> a rdfs:Class .
+
+<http://reegle.info/schema#ProjectOutput> a rdfs:Class .
+
+<http://reegle.info/schema#Sector> a rdfs:Class .
+
+<http://reegle.info/schema#Specialisation> a rdfs:Class .
+
+<http://reegle.info/schema#Technology> a rdfs:Class .
+
+<http://www.geonames.org/ontology#Feature> a rdfs:Class .
+
+<http://www.w3.org/2004/02/skos/core#Concept> a rdfs:Class .
+
+<http://xmlns.com/foaf/0.1/Document> a rdfs:Class .
+
+<http://xmlns.com/foaf/0.1/Image> a rdfs:Class .
+
+<http://xmlns.com/foaf/0.1/Organization> a rdfs:Class .
+
+<http://dbpedia.org/property/abbreviation> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://dbpedia.org/property/city> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://dbpedia.org/property/country> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range <http://www.geonames.org/ontology#Feature> .
+
+<http://dbpedia.org/property/document> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range <http://xmlns.com/foaf/0.1/Document> .
+
+<http://dbpedia.org/property/fax> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://dbpedia.org/property/state> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://dbpedia.org/property/street> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://dbpedia.org/property/zipCode> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://purl.org/dc/elements/1.1/description> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://purl.org/dc/elements/1.1/title> rdfs:domain <http://reegle.info/schema#CountryProfile>,
+        <http://reegle.info/schema#ProjectOutput>,
+        <http://reegle.info/schema#Sector>,
+        <http://reegle.info/schema#Specialisation>,
+        <http://reegle.info/schema#Technology> ;
+    rdfs:range rdfs:Literal .
+
+<http://purl.org/dc/terms/subject> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
+
+<http://reegle.info/schema#activeIn> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range <http://www.geonames.org/ontology#Feature> .
+
+<http://reegle.info/schema#activities> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#capacityConcerns> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#competition> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#degreeIndependence> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#desirability> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyDebates> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyEfficiency> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyFramework> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyProcedure> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyRegulator> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyRegulatoryRole> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#energyStudies> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#extendNetwork> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#funded> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#governmentAgencies> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#governmentRole> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#mission> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#organisationType> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#ownership> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#profile> rdfs:domain <http://www.geonames.org/ontology#Feature> ;
+    rdfs:range <http://reegle.info/schema#CountryProfile> .
+
+<http://reegle.info/schema#projectDescription> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#projectExpertise> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#projectTitle> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#referenceNumber> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#references> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#regulatoryBarriers> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#regulatoryFramework> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#regulatoryRoles> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#reliance> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#renewableEnergy> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#sector> rdfs:domain <http://reegle.info/schema#ProjectOutput>,
+        <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range <http://reegle.info/schema#Sector>,
+        rdfs:Literal .
+
+<http://reegle.info/schema#sources> rdfs:domain <http://reegle.info/schema#CountryProfile> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#specialisation> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range <http://reegle.info/schema#Specialisation> .
+
+<http://reegle.info/schema#targetAudience> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range rdfs:Literal .
+
+<http://reegle.info/schema#technology> rdfs:domain <http://reegle.info/schema#ProjectOutput> ;
+    rdfs:range <http://reegle.info/schema#Technology> .
+
+<http://www.geonames.org/ontology#countryCode> rdfs:domain <http://www.geonames.org/ontology#Feature> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.geonames.org/ontology#name> rdfs:domain <http://www.geonames.org/ontology#Feature> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#definition> rdfs:domain <http://reegle.info/schema#Sector>,
+        <http://www.w3.org/2004/02/skos/core#Concept> ;
+    rdfs:range rdfs:Literal .
+
+<http://www.w3.org/2004/02/skos/core#prefLabel> rdfs:domain <http://www.w3.org/2004/02/skos/core#Concept> ;
+    rdfs:range rdfs:Literal .
+
+<http://xmlns.com/foaf/0.1/depiction> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range <http://xmlns.com/foaf/0.1/Image> .
+
+<http://xmlns.com/foaf/0.1/name> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
+<http://xmlns.com/foaf/0.1/phone> rdfs:domain <http://xmlns.com/foaf/0.1/Organization> ;
+    rdfs:range rdfs:Literal .
+
