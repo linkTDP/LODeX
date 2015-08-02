@@ -939,7 +939,7 @@ def Inizialier(endpoint):
     
     return endpoint,q,sparql
     
-def ExtractSchema(endpoint,clustering=False):
+def ExtractSchema(endpoint,clustering=False,nClassLimit=100):
 #     print str(endpoint['_id'])+" - "+endpoint.nome+" - Test Connection "
     runId=mongo.startTestNew(endpoint) # add Lock
     q = queryGenerator.QueryGenerator()
@@ -989,9 +989,7 @@ def ExtractSchema(endpoint,clustering=False):
                     mongo.addTestLogNew(runId,{'phase':'PropListCount','status':'finish','time':datetime.datetime.now()})
         else:
             mongo.addTestLogNew(runId,{'phase':'PropListPlusCount','status':'finish','time':datetime.datetime.now()})
-        
-        
-        
+                
 #         if ike:
 #             # download Ontological Info
 #             mongo.addTestLogNew(runId,{'phase':'extract_onto','status':'start','time':datetime.datetime.now()})          
@@ -1000,149 +998,39 @@ def ExtractSchema(endpoint,clustering=False):
 #             #TODO IMPROVING RICORSIVE SEARCH
         
         
-        
-        """ extensional """
-        # Extracting left right property
-        #### left
-        mongo.addTestLogNew(runId,{'phase':'prop_left_count','status':'start','time':datetime.datetime.now()})      
-        if downloadPropLeftWithCount(endpoint,q,sparql,runId):
-            mongo.addTestLogNew(runId,{'phase':'prop_left_count_easy','status':'start','time':datetime.datetime.now()})
-            if not downloadPropLeftWithCountEasy(endpoint,q,sparql,runId):
-                mongo.addTestLogNew(runId,{'phase':'prop_left_count_easy','status':'finish','time':datetime.datetime.now()})
+        if mongo.getNClassLodex(runId) is not None and mongo.getNClassLodex(runId) < nClassLimit:
+            """ extensional """
+            # Extracting left right property
+            #### left
+            mongo.addTestLogNew(runId,{'phase':'prop_left_count','status':'start','time':datetime.datetime.now()})      
+            if downloadPropLeftWithCount(endpoint,q,sparql,runId):
+                mongo.addTestLogNew(runId,{'phase':'prop_left_count_easy','status':'start','time':datetime.datetime.now()})
+                if not downloadPropLeftWithCountEasy(endpoint,q,sparql,runId):
+                    mongo.addTestLogNew(runId,{'phase':'prop_left_count_easy','status':'finish','time':datetime.datetime.now()})
+            else:
+                mongo.addTestLogNew(runId,{'phase':'prop_left_count','status':'finish','time':datetime.datetime.now()})
+            #### right
+            mongo.addTestLogNew(runId,{'phase':'prop_right_count','status':'start','time':datetime.datetime.now()})
+            if downloadPropRightWithCount(endpoint,q,sparql,runId):
+                mongo.addTestLogNew(runId,{'phase':'prop_right_count_easy','status':'start','time':datetime.datetime.now()})
+                if not downloadPropRightWithCountEasy(endpoint,q,sparql,runId):
+                    mongo.addTestLogNew(runId,{'phase':'prop_right_count_easy','status':'finish','time':datetime.datetime.now()})
+            else:
+                mongo.addTestLogNew(runId,{'phase':'prop_right_count','status':'finish','time':datetime.datetime.now()})
+            
+            if clustering:
+                """ Clustering ex """
+                mongo.addTestLogNew(runId,{'phase':'clustClasses','status':'start','time':datetime.datetime.now()})
+                DoubleInstExtract(endpoint,q,sparql,runId)
+                mongo.addTestLogNew(runId,{'phase':'clustClasses','status':'finish','time':datetime.datetime.now()})
         else:
-            mongo.addTestLogNew(runId,{'phase':'prop_left_count','status':'finish','time':datetime.datetime.now()})
-        #### right
-        mongo.addTestLogNew(runId,{'phase':'prop_right_count','status':'start','time':datetime.datetime.now()})
-        if downloadPropRightWithCount(endpoint,q,sparql,runId):
-            mongo.addTestLogNew(runId,{'phase':'prop_right_count_easy','status':'start','time':datetime.datetime.now()})
-            if not downloadPropRightWithCountEasy(endpoint,q,sparql,runId):
-                mongo.addTestLogNew(runId,{'phase':'prop_right_count_easy','status':'finish','time':datetime.datetime.now()})
-        else:
-            mongo.addTestLogNew(runId,{'phase':'prop_right_count','status':'finish','time':datetime.datetime.now()})
-        
-        if clustering:
-            """ Clustering ex """
-            mongo.addTestLogNew(runId,{'phase':'clustClasses','status':'start','time':datetime.datetime.now()})
-            DoubleInstExtract(endpoint,q,sparql,runId)
-            mongo.addTestLogNew(runId,{'phase':'clustClasses','status':'finish','time':datetime.datetime.now()})
-    
+            print "extensional extraction skippet due to the high number of classes"
     ################## FINE
     mongo.addTestLogNew(runId,{'phase':'finish','time':datetime.datetime.now()})
     # removing Lock
     
-    
-# def onlyIntensional(endpoint):
-#     
-#     print str(endpoint['_id'])+" - "+endpoint.nome if  hasattr(endpoint, 'nome') and endpoint.nome is not None  else 'None '+" - Test Connection "
-#     mongo.startCustom(endpoint)
-#     #mongo.startIkE(endpoint) # add Lock
-#     q = queryGenerator.QueryGenerator()
-#     sparql = SPARQLWrapper(endpoint['url'])
-#     sparql.setTimeout(300)
-#     mongo.insertCustomLogging(endpoint,{'phase':'test_connection','status':'start','time':datetime.datetime.now()}) 
-#     ## Test Connection
-#     if testConnection(endpoint,q,sparql):
-#         mongo.insertCustomLogging(endpoint,{'phase':'test_connection','status':'finish','time':datetime.datetime.now()})
-#         mongo.insertCustomLogging(endpoint,{'phase':'extract_onto','status':'start','time':datetime.datetime.now()})          
-#         downloadIntensional(endpoint,q,sparql,True,True)
-#         mongo.insertCustomLogging(endpoint,{'phase':'extract_onto','status':'finish','time':datetime.datetime.now()})
-# 
-#         
-#     
-#     
-# def downloadIntensional(endpoint,q,sparql,ike=False,justIntensional=False):
-#     
-#     sparql.setReturnFormat(XML)
-#     onto = [] #result
-#     # for iteration
-#     findedClasses=set()
-#     queriedClasses=set()
-# #     for clas in endpoint.classes:
-#     end=mongo.getEndpointByIDTest(endpoint['_id'])
-#     # binding Class in subject classes
-#     if hasattr(end, 'classes'):
-#             findedClasses=set(clas['class'] for clas in end.classes)
-#     if hasattr(end, 'propList'):
-#             findedClasses.update(set(pro['property'] for pro in end.propList))
-#     print "** Extract Onto Classe"
-#     iteration=0
-#     #and endpoint['_id'] <> 436
-#     errori=0 
-#     while len(findedClasses-queriedClasses)>0 and errori < 100:
-#         iteration += 1
-# #         if iteration == 20:
-# #             break
-#         print 'loop'
-#         print endpoint['_id']  
-#         for clas in findedClasses-queriedClasses:
-#                 
-#                 sparql.setQuery(q.getOntoRelBySClass(clas).query)
-#                 try:
-#                     results = sparql.queryAndConvert()
-#                     queriedClasses.add(clas)
-#                     if parseResponseWithType(end,results,'extract_onto_class',False) is not None and len(parseResponseWithType(end,results,'extract_onto_class',False))>0:
-#                         print q.getOntoRelBySClass(clas).query
-#                         print endpoint['_id'] 
-#                         for cur in parseResponseWithType(end,results,'extract_onto_class',False):
-#                             #controllo che s e o non siano entrambi nella lista delle classi istanziate.
-#                             pprint.pprint(cur)
-#                             if 'p' in cur[0]:
-#                                 onto.append({'s':clas,'p':cur[0]['p'],'o':cur[1]['o']})
-#                                 if cur[1]['type'] <> 'literal':
-#                                     findedClasses.add(cur[1]['o']) 
-#                             else:
-#                                 onto.append({'s':clas,'p':cur[1]['p'],'o':cur[0]['o']})
-#                                 if cur[1]['type'] <> 'literal':
-#                                     findedClasses.add(cur[0]['o'])
-#                             
-#                                         
-#                 except:
-#                     queriedClasses.add(clas)
-#                     errori = errori + 1
-#                     logfun.exception("Something awful happened!")
-#                     var = traceback.format_exc()
-#                     errore = {"date":datetime.datetime.now(),"phase":"extract_onto_class","traceback":var}
-#                     if justIntensional:
-#                         mongo.insertCustomError(end, errore)
-#                         
-#                     else:
-#                         if ike:
-#                             mongo.addIkeError(end, errore)
-#                         else:
-#                             mongo.addTestErrorNew(runId, errore)
-#         if len(onto) > 0 and justIntensional:
-#             mongo.insertIntensionalBulk(onto,end)
-#             onto = []
-# 
-# 
-#         # binding Prop in subject classes
-#     if justIntensional:
-#         mongo.insertIntensionalBulk(onto,end)
-#     else:
-#         if ike:
-#             mongo.insertTestIkE(onto,end,iteration)
-#         else:
-#             mongo.insertIkeInTest(onto,end,iteration)
-# 
-# def adjustPropCount(endpoint):
-#     end=mongo.getEndpointByIDTest(endpoint['_id'])
-#     print '****  '+str(end.id)
-#     if hasattr(end, 'propList'):
-#         if end.propList[0]['count'] == 0:
-#             q = queryGenerator.QueryGenerator()
-#             sparql = SPARQLWrapper(end.uri)
-#             #mongo.addTestLog(endpoint,{'phase':'PropListCount','status':'start','time':datetime.datetime.now()})
-#             if downloadPropListCount(end,q,sparql):
-#                 print 'aio'
-#                 #mongo.addTestLog(endpoint,{'phase':'PropListCount','status':'finish','time':datetime.datetime.now()})
-# 
-# 
-# 
-# 
 
 
-    
-    
 def remDuplicatecoup(coup):
     cleaned=[]
     tmpC=[]

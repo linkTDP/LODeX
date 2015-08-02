@@ -727,3 +727,10 @@ def getLastIdEndpointsLodex():
     else:
         return int(lastEnd['_id'])+1
 
+
+def getNClassLodex(runId):
+    client = pm.MongoClient()
+    end=client.lodex.runInfo.find_one({'_id':runId})
+    return len(end['classes']) if 'classes' in end else None
+
+
