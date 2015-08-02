@@ -22,8 +22,6 @@ def generateSSforAllEnd():
         pp.postProcForId(idEnd)
         
         
-        
-        
 def generateSSforEndById(id):
     pp.postProcForId(id)
     
