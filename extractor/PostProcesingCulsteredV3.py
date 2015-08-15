@@ -52,8 +52,8 @@ def postProcForId(idEnd):
         start_time = time.time()
         
         print 'endpoint id : '+str(end['id'])
-        if 'nome' in end:
-            print end['nome']
+        if 'name' in end:
+            print end['name']
         
         print 'start time : '+str(start_time)
         
@@ -481,8 +481,8 @@ def postProcForId(idEnd):
                 obj['instances']=end['instances']
             if 'triples' in end:
                 obj['triples']=end['triples']
-            if 'nome' in end:
-                obj['nome']=end['nome']
+            if 'name' in end:
+                obj['name']=end['name']
             if 'error' in end:
                 obj['error']=end['error']
             if 'classes' in end:

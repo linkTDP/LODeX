@@ -1,6 +1,6 @@
 import json
 import sys
-import lodex.util.mongo as mongo
+import extractor.util as mongo
 
 def main(argv):
     file_name="datasets.json"

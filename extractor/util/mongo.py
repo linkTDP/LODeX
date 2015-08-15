@@ -639,8 +639,9 @@ def startTestNew(endpoint):
         currRunNumber=currRun['run']+1
     a={'id':endpoint['_id'],
            'run':currRunNumber,
-            'datasets':endpoint['datasets'] if 'dataset' in endpoint else None,
-            'url':endpoint['url']}
+            'datasets':endpoint['datasets'] if 'datasets' in endpoint else None,
+            'url':endpoint['url'],
+            'name':endpoint['name'] if 'name' in endpoint else None}
     idRun = client.lodex.runInfo.insert(a)
     return idRun
 

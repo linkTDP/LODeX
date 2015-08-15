@@ -34,7 +34,7 @@ if parseResponseForDatasetExtr(None,results,"test_connection",False):
     
     
     datasets=[]
-    count=1
+    count=mongo.getLastIdEndpointsLodex()
     for key in endDIct:
         ds={}
         if len(endDIct[key]['label']) > 1:
