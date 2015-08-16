@@ -1,0 +1,937 @@
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../bower_components/sortable-table/sortable-table.html">
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="../js/codemirror.js"></script>
+<script src="../js/sparql.js"></script>
+<link href="../bower_components/core-menu/core-menu.html" rel="import">
+  <link href="../bower_components/paper-dropdown/paper-dropdown.html" rel="import">
+  <link href="../bower_components/paper-item/paper-item.html" rel="import">
+  <link href="../bower_components/paper-spinner/paper-spinner.html" rel="import">
+  <link href="../bower_components/core-dropdown-menu/core-dropdown-menu.html" rel="import">
+    <link href="../bower_components/core-item/core-item.html" rel="import">
+      <link href="../bower_components/core-menu/core-menu.html" rel="import">
+      
+<link href="../bower_components/paper-input/paper-input-decorator.html" rel="import">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/sgvizler.js"></script>
+
+<polymer-element name="query-interface" attributes="ss query">
+    
+    <template>
+
+    <link rel="stylesheet" href="../js/codemirror.css">
+	<link rel="stylesheet" href="../js/bootstrap.css" shim-shadowdom>
+	<link rel="stylesheet" href="../js/google.css">
+    <style>
+    paper-tabs, core-toolbar {
+	background-color: #212121;
+	color: #fff;
+	box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
+	font-family:Lato, sans-serif;
+	font-weight:600; 
+	font-size:26px;
+}
+
+core-dropdown {
+box-sizing: border-box;
+min-width: 170px;
+background-color: #eee;
+color: #000;
+border: 1px solid #ccc;
+border-radius: 3px;
+}
+
+.white{
+	background: #FFFFFF;
+	color: #212121;
+}
+
+paper-button.customRed > core-icon {
+      margin-right: 4px;
+    }
+    
+    paper-button.customRed {
+      color: #F44336;
+      
+    }
+
+    paper-button[raised].customRed {
+      background:#F44336;
+      color: #fff;
+    }
+    
+    paper-button.customGreen > core-icon {
+      margin-right: 4px;
+    }
+    
+    paper-button.customGreen {
+      color: #0f9d58;
+      
+    }
+
+    paper-button[raised].customGreen {
+      background:#0f9d58;
+      color: #fff;
+    }
+    
+    #principal{
+    	height: 100%;
+    width: 100%;
+    overflow: hidden;
+    }
+    #command{
+    font-family:Lato, sans-serif;
+    	width: 100%;
+    	height: 30%;
+    	font-size:15px;
+    	
+    }
+    #content{
+    	width: 100%;
+    	height: 70%;
+    }
+    .bodyT{
+    	width: 100%;
+    	height: 100%;
+    	
+    }
+    core-pages {
+	height: 100%;
+	width: 100%;
+	
+}
+#result{
+	overflow:auto;
+	height:100%;
+	width:100%;
+}
+
+#sortTable{
+	height: 100%;
+	width: 100%;
+}
+
+#resultViz{
+margin:5px;
+	height: 100%;
+	width: 100%;
+}
+
+.boxCommand{
+	margin: 2px;
+}
+
+html /deep/ paper-dropdown-menu {
+box-sizing: border-box;
+width: 140px;
+}
+
+.boxTitle{
+	font-weight:600; 
+	font-size:24px;
+	padding-top: 8px;
+	padding-right: 8px;
+}
+
+.CodeMirror {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black;
+	}
+	
+	.fab > core-icon::shadow path {
+      fill: #fff;
+    }
+	.small {
+    	height: 30px;
+    	width: 30px;
+    	margin-bottom: 50px;
+  	}
+paper-fab.green {
+      background: #0f9d58;
+    }
+    
+    .counSt{
+    font-size: 24pt;
+text-align: center;
+    }
+
+    
+    </style>
+    
+    <div id="principal">
+	    <div id= "command">
+	    	<div vertical layout style="height:100%">
+	    		<div horizontal layout style="height:100%" id="fisrtline" flex>
+	    		<div horizontal layout center class="boxCommand" flex>
+	    		<div class="boxTitle" style="margin:2px;">Filter:</div>
+	    		<div style="margin:2px;">
+				
+			      <core-dropdown-menu label="Select an attrinute" disabled?="{{attrPar.length == 0 || !autocompile}}">
+			        <core-dropdown class="dropdown">
+			          <core-menu selected={{filtAttSel}}>
+			            <template repeat="{{attrPar}}">
+			              <core-item>{{}}</core-item>
+			            </template>
+			          </core-menu>
+			        </core-dropdown>
+			      </core-dropdown-menu>
+			      </div>
+			      <div style="margin:2px;">
+			      <core-dropdown-menu label="operator" disabled?="{{attrPar.length == 0 || !autocompile}}">
+			        <core-dropdown class="dropdown constrained-height">
+			          <core-menu selected={{commandF}} class="menu">
+			              <core-item>regex</core-item>
+			              <core-item>=</core-item>
+			              <core-item>></core-item>
+			              <core-item>&lt;</core-item>
+			          </core-menu>
+			        </core-dropdown>
+			      </core-dropdown-menu>
+				</div>
+				<div style="margin:2px;padding-top: 3px;" >
+				<paper-input-decorator label="write condition" disabled?="{{attrPar.length == 0 || !autocompile}}">
+      				<input value={{conditionF}} is="core-input">
+    			</paper-input-decorator>
+				</div>
+				<div>
+				
+    			<paper-fab hidden?="{{conditionF==null || commandF==null || filtAttSel==null}}" mini icon="add" class="green" title="done" on-click={{addFilter}}></paper-fab>
+    			</div>
+    			<div>
+    			<paper-button hidden?={{!filter}} raised class="customRed" on-click={{removeFilt}}>
+			      <core-icon raised icon="delete"></core-icon>
+			      All
+			    </paper-button>
+    			</div>
+
+				</div>
+				
+				
+	    		
+	    		
+	    		<div vertical layout  class="boxCommand" flex>
+	    		
+	    		<div id="attBox" horizontal layout center class="boxCommand" flex>
+	    		<div class="boxTitle" style="margin:2px;">Attribute:</div>
+	    		<div style="margin:2px;">
+				
+			      <core-dropdown-menu label="Select an attrinute" disabled?="{{attrPar.length == 0 || !autocompile}}">
+			        <core-dropdown class="dropdown">
+			          <core-menu selected={{attSel}}>
+			            <template repeat="{{attrPar}}">
+			              <core-item>{{}}</core-item>
+			            </template>
+			          </core-menu>
+			        </core-dropdown>
+			      </core-dropdown-menu>
+			      </div >
+			      
+			      <template bind="{{attSel as a}}">
+			      <template if="{{a != null}}">
+			      <div style="margin:2px;font-size:22px;">
+			      Mandatory
+			      </div>
+			      <div style="margin:2px;">
+								      
+			      <paper-toggle-button style="margin:4px;" id="attMandtoggle" checked?={{curAttMandatory}} on-change={{curAttMandatoryChanged}}></paper-toggle-button>
+			      </div>
+			      </template>
+			      </template>
+			      
+			      <div>
+				
+    			<paper-fab style="margin:4px;" hidden?={{attSel==null}} mini icon="delete" class="red" title="done" on-click={{deleteAtt}} disabled?="{{ !autocompile}}"></paper-fab>
+    			</div>
+	    		</div>
+	    		
+	    		<div id="classBox" horizontal layout center class="boxCommand" flex>
+	    		<div class="boxTitle" style="margin:2px;">Class:</div>
+	    		<div style="margin:2px;">
+				
+			      <core-dropdown-menu label="Select a class" disabled?="{{classPar.length == 0 || !autocompile}}">
+			        <core-dropdown class="dropdown">
+			          <core-menu selected={{classSel}}>
+			            <template repeat="{{classPar}}">
+			              <core-item>{{}}</core-item>
+			            </template>
+			          </core-menu>
+			        </core-dropdown>
+			      </core-dropdown-menu>
+			      </div>
+			      
+			      <template bind="{{classSel as c}}">
+			      <template if="{{c != null}}">
+			      <div style="margin:2px;font-size:22px;">
+			      Mandatory
+			      </div>
+			      <div style="margin:2px;">
+			      <paper-toggle-button style="margin:4px;" id="classMandtoggle" checked?={{curClassMandatory}} on-change={{curClassMandatoryChanged}}></paper-toggle-button>
+			      </div>
+			      </template>
+			      </template>
+			      <div>
+				
+    			<paper-fab style="margin:4px;" disabled?={{classSel|isLeafClass}} hidden?={{classSel==null}} mini icon="delete" class="red" title="done" on-click={{deleteClass}}></paper-fab>
+    			</div>
+	    		</div>
+	    		</div>
+	    		
+	    		
+	    		
+	    		</div>
+	    		<div horizontal layout style="height:100%" id="secondLine" flex>
+	    		
+	    		<div vertical layout class="boxCommand" flex>
+		    		<div horizontal layout centerclass="boxCommand" flex>
+						<div class="boxTitle" style="margin:2px;">Pagination:</div>
+			    		<div>
+			    		<paper-input-decorator label="page size" autoValidate>
+		      				<input disabled?="{{ !autocompile}}" type="number" value={{pageSize}} is="core-input" style="width: 75px;">
+		    			</paper-input-decorator>
+			    		</div>
+			    		<div>
+			    		<paper-button disabled="{{!autocompile}}" hidden?="{{ pageSize | isNew }}" raised class="customGreen" on-click={{changePage}}>
+					      <core-icon raised icon="done"></core-icon>
+					      Update
+					    </paper-button>
+			    		</div>
+			    		<div flex class="counSt">
+			    		<template bind="{{count as c}}">
+			    		<template if="{{c == -1}}">
+			    			Getting Count...
+			    		</template>
+			    		<template if="{{c > -1 && c !=null}}">
+			    			{{count}} results
+			    		</template>
+			    		</template>
+			    		</div>
+			    	</div>
+			    	
+			    	
+		    		<div horizontal layout end-justified center class="boxCommand" flex>
+		    		<template bind="{{autocompile as au}}">
+		    		
+		    		<div flex style="margin:4px;font-size:20px">
+		    		<templete if="{{!au}}">
+		    		Page {{currentPage}}
+		    		</templete>
+		    		</div>
+		    		
+		    		<div style="margin:2px;">
+				<templete if="{{!au}}">
+    			<paper-fab disabled?="{{ !autocompile}}" hidden?="{{currentPage==1}}"  mini icon="chevron-left" class="white"   title="done" on-click={{prevPage}}></paper-fab>
+    			</templete>
+    			</div>
+	    		<div style="margin:2px;font-size:20px;">
+	    		<templete if="{{!au}}">
+	    		Page
+	    		</templete>
+	    		</div>
+	    		
+	    		<div style="margin:2px;">
+				<templete if="{{!au}}">
+    			<paper-fab disabled?="{{ !autocompile}}" mini icon="chevron-right" class="white" title="done" on-click={{nextPage}}></paper-fab>
+    			</templete>
+    			</div>
+ 
+    			</template>
+		    		</div>
+	    		</div>
+
+				<div vertical layout  class="boxCommand" flex>
+	    		<div horizontal layout center class="boxCommand" flex>
+	    		
+	    		
+	    		<div class="boxTitle" style="margin:2px;">Order:</div>
+				
+				<div style="margin:2px;">
+				
+			      <core-dropdown-menu label="Select a parameter" disabled?="{{!autocompile || ordPar.length == 0}}">
+			        <core-dropdown class="dropdown">
+			          <core-menu selected={{ordSel}}>
+			            <template repeat="{{ordPar}}"><!-- TODO -->
+			              <core-item>{{}}</core-item>
+			            </template>
+			          </core-menu>
+			        </core-dropdown>
+			      </core-dropdown-menu>
+			      </div>
+				  <div style="margin:2px;">
+			      <core-dropdown-menu label="order condition" disabled?="{{ !autocompile || attrPar.length == 0}}">
+			        <core-dropdown class="dropdown constrained-height">
+			          <core-menu selected={{commandOrd}} class="menu">
+			              <core-item>ascending</core-item>
+			              <core-item>descending</core-item>
+			          </core-menu>
+			        </core-dropdown>
+			      </core-dropdown-menu>
+				</div>
+				
+				<div>
+				
+    			<paper-fab hidden?="{{ordSel==null || commandOrd==null}}" mini icon="add" class="green" title="done" on-click={{addOrder}}></paper-fab>
+    			</div>
+	    		<div>
+    			<paper-button disabled?="{{!autocompile }}" hidden?={{!ordCond}} raised class="customRed" on-click={{removeOrd}}>
+			      <core-icon raised icon="delete"></core-icon>
+			      All
+			    </paper-button>
+    			</div>
+				
+	    		</div>
+	    		
+	    		<div horizontal layout  center class="boxCommand" flex>
+	    		
+    			<div  style="margin:8px;font-size:20px;">
+	    		Auto Compiler
+	    		</div>
+    			<div id="compBox" style="margin:2px;">
+			      <paper-toggle-button id="compile" checked?={{autocompile}} on-change={{compileChange}}></paper-toggle-button>
+			     </div>
+				
+	    		</div>
+	    		
+	    		
+	    		</div>
+	    	</div>
+	    </div>
+	    <div id= "content">
+	    <paper-tabs selected="{{selected}}">
+	  		<paper-tab>SPARQL Query</paper-tab>
+	  		<paper-tab>Results</paper-tab>
+		</paper-tabs>
+	
+		<core-pages selected="{{selected}}">
+	  		
+	  		
+	  		
+	  		<div ><div style="height:20px"></div><form><textarea id="code" name="code">
+PREFIX a: &lt;http://www.w3.org/2000/10/annotation-ns#>
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/>
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/>
+
+# Comment!
+
+SELECT ?Concept 
+where 
+	{[] a ?Concept} 
+LIMIT 100
+</textarea></form><div style="height:20px"></div>
+<div style="text-align:right">
+<paper-button raised on-click={{launchQuery}} >
+			      Lunch Query
+			    </paper-button>
+			    
+			    </div>
+</div>
+
+<google-chart id="gTable"
+    type='table'>
+  </google-chart>
+
+<div>
+
+
+<div id ="resultViz">
+
+</div>
+</div>
+		</core-pages>
+	    </div>
+    </div>
+ <paper-toast id="toast1" text="Filter conditions not complete"></paper-toast>   
+    </template>
+    <script>
+//     var editor=CodeMirror.fromTextArea(document.que, {
+//         mode: "application/x-sparql-query",
+//         matchBrackets: true
+//       });
+	var globalData;
+	var globalColumn;
+    Polymer({
+    	selected:1,
+    	editor:null,
+    	data:[],
+    	columns:[],
+		attrPar:[],
+		filtAttSel:null,
+		conditionF:null,
+		commandF:null,
+		filter:false,
+		pageSize:null,
+		count:null,
+		attSel:null,
+		classSel:null,
+		classPar:[],
+		curAttMandatory:null,
+		curClassMandatory:null,
+		ordPar:[],
+		commandOrd:null, 
+		ordSel:null,
+		ordCond:false,
+		currentPage:1,
+		autocompile:true,
+		launchQuery:function(){
+			this.autocompile=false;
+			this.launchCustomQuery()
+		},
+		compileChange:function(){
+			var btn = this.$.compBox.querySelector('#compile');
+			this.autocompile=btn.checked;
+		},
+		nextPage:function(){
+			this.currentPage=this.currentPage+1;
+			qo.nextPage();
+			this.updateQueryPagin();
+
+		},
+		prevPage:function(){
+			this.currentPage=this.currentPage-1;
+			qo.prevPage();
+			this.updateQueryPagin();
+
+		},
+		removeOrd:function(){
+			qo.removeAllO();
+			this.updateQuery();
+			this.queryChanged();
+			this.ordCond=false;
+		},
+		addOrder:function(){
+			qo.addOrdCond(this.ordPar[this.ordSel],this.commandOrd==0?"ASC":"DESC")
+			this.updateQuery();
+			this.queryChanged();
+			this.ordCond=true;
+		},
+		attSelChanged:function(){
+			if (this.attSel != null){
+				var indexClas=this.getClasVizinxContainAttPar(this.attrPar[this.attSel])
+				var indexAtt =this.getAttVizIndxByInxClasPar(indexClas,this.attrPar[this.attSel])
+				
+				this.curAttMandatory=!this.query[indexClas].attributes[indexAtt].opt
+			}
+		},
+		curAttMandatoryChanged:function(){
+			if(this.attSel!= null){
+				var indexClas=this.getClasVizinxContainAttPar(this.attrPar[this.attSel])
+				var indexAtt =this.getAttVizIndxByInxClasPar(indexClas,this.attrPar[this.attSel])
+				var curOpt=!this.query[indexClas].attributes[indexAtt].opt
+				/* console.log('changed')
+				console.log(curOpt) */
+				var btn = this.$.attBox.querySelector('#attMandtoggle');
+		        
+// 				console.log(this.curAttMandatory)
+				if (curOpt!=btn.checked){
+					this.query[indexClas].attributes[indexAtt].opt=!this.query[indexClas].attributes[indexAtt].opt
+					qo.changeMandatoryToAtt(this.attrPar[this.attSel]);
+					this.queryChanged();
+					this.updateQuery();
+					
+				}
+			}
+		},
+		classSelChanged:function(){
+			if (this.classSel != null){
+				var inx=this.getClasVizinxByPar(this.classPar[this.classSel])
+				this.curClassMandatory=!this.query[inx].opt
+				
+			}
+		},
+		getClasVizinxByPar:function(par){
+			return _.indexOf(_.map(this.query,function(a){return a.param}),par)
+		},
+		curClassMandatoryChanged:function(){
+			if(this.classSel!= null){
+				var indexClas=this.getClasVizinxByPar(this.classPar[this.classSel])
+				var curOpt=!this.query[indexClas].opt
+				/* console.log('changed')
+				console.log(curOpt) */
+				var btn = this.$.classBox.querySelector('#classMandtoggle');
+		        
+// 				console.log(this.curAttMandatory)
+				if (curOpt!=btn.checked){
+					this.query[indexClas].opt=!this.query[indexClas].opt
+					qo.changeMandatoryToClass(this.classPar[this.classSel]);
+					this.updateQuery();
+					this.queryChanged();
+				}
+			}
+		},
+		
+		deleteClass:function(){
+			qo.deleteClass(this.classPar[this.classSel]);
+			
+			this.query.splice(_.indexOf(_.map(this.query,function(a){return a.param}),this.classPar[this.classSel]),1)
+			this.fire('removenode',this.classPar[this.classSel].substring(1))
+			this.updateQuery();
+			this.queryChanged();
+		},
+		getClasVizinxContainAttPar:function(par){
+			return _.indexOf(_.map(this.query,function(a){return _.some(a.attributes,function(b){return b.param==par})}.bind(this)),true)
+		},
+		deleteAtt:function(){
+			console.log(this.getClasVizinxContainAttPar(this.attrPar[this.attSel]))
+			var indexClas=this.getClasVizinxContainAttPar(this.attrPar[this.attSel])
+			console.log(this.getAttVizIndxByInxClasPar(indexClas,this.attrPar[this.attSel]))
+			var indexAtt =this.getAttVizIndxByInxClasPar(indexClas,this.attrPar[this.attSel])
+			this.query[indexClas].attributes.splice(indexAtt,1)
+			qo.deleteAttribute(this.attrPar[this.attSel]);
+			this.updateQuery();
+			this.queryChanged();
+		},
+		getAttVizIndxByInxClasPar:function(inx,par){
+			return _.indexOf(_.map(this.query[inx].attributes,function(a){return a.param}),par)
+		},
+		inzialize:function(){
+			attrPar=[];
+			filtAttSel=null;
+			conditionF=null;
+			commandF=null;
+			filter=false;
+			pageSize=null;
+			count=null;
+			attSel=null;
+			classSel=null,
+			classPar=[];
+		},
+		changePage:function(){
+			qo.changePageSize(this.pageSize)
+			this.pageSize=null;
+			this.updateQuery();
+			this.queryChanged();
+		},
+		isLeafClass:{
+			toDOM: function(value,c) {
+				  
+				  console.log(value)
+				if (!isEmpty(qo)){
+					return !qo.isNodeLeaf(this.classPar[this.classSel]);
+				}else{
+					return true;
+				}
+			    
+			  },
+			  toModel: function(value) {
+				  if (!isEmpty(qo)){
+						return !qo.isNodeLeaf(this.classPar[this.classSel]);
+					}else{
+						return true;
+					}
+			  }
+		},
+		isNew: {
+			  toDOM: function(value,c) {
+				  
+				  console.log(value)
+				if (!isEmpty(qo)){
+					console.log(isNaN(value)||value==null||(value==qo.nForP&&!isNaN(value)))
+					return isNaN(value)||value== ""||(value==qo.nForP&&!isNaN(value));
+				}else{
+					return true;
+				}
+			    
+			  },
+			  toModel: function(value) {
+				  if (!isEmpty(qo)){
+						return isNaN(value)||value.lenght== ""||(value==qo.nForP&&!isNaN(value));
+					}else{
+						return true;
+					}
+			  }
+			},
+		removeFilt:function(){
+			qo.deleteAllFilter();
+			this.updateQuery();
+			this.conditionF=null;
+    		this.filtAttSel=null;
+    		this.commandF=null;
+    		this.filter=false;
+		},
+		addFilter:function(){
+// 			console.log(this.filtAttSel)
+// 			console.log(this.conditionF)
+// 			console.log(this.commandF)
+			var command=""
+			if(this.commandF!=null){
+				if (this.commandF == 1)command="=";
+				if (this.commandF == 2)command=">";
+				if (this.commandF == 3)command="<";
+			}
+			
+			if (this.filtAttSel!=null && this.commandF!=null && this.conditionF){
+				qo.addFiltCondToPar(this.attrPar[this.filtAttSel],this.commandF==0,this.conditionF.trim(),(this.commandF==0)?undefined:command)
+				this.filter=true;
+				this.updateQuery();
+				this.conditionF=null;
+	    		this.filtAttSel=null;
+	    		this.commandF=null;
+			}else{
+				this.$.toast1.show();
+			}
+		},
+    	queryChanged:function(){
+    		
+    		if (!isEmpty(this.query)){
+    			console.log(this.query)
+    			console.log(qo.getAttrPrameters());
+    			this.attrPar=qo.getAttrPrameters();
+    		}
+    		if (!isEmpty(qo)){
+    			this.attrPar=qo.getAttrPrameters();
+    			this.pageSize=qo.nForP;
+    			this.classPar=qo.getClassPrameters();
+    			this.ordPar=qo.getParOrd();
+    			qo.page=1;
+    		}
+    		this.conditionF=null;
+    		this.filtAttSel=null;
+    		this.commandF=null;
+    		this.classSel=null;
+    		this.attSel=null;
+    		this.curAttMandatory=null;
+    		this.commandOrd=null 
+    		this.ordSel=null
+    		
+    		this.currentPage=1;
+    	},
+    	filtAttSelChanged:function(){
+    		console.log(this.filtAttSel)
+    	},
+    	ssChanged:function(){
+    		if (!isEmpty(this.ss)){
+    			
+    			sgvizler
+    	        .defaultEndpointOutputFormat('jsonp')
+    	        .defaultEndpointURL(this.ss.uri);
+    		}
+    	},
+    	updateQuery:function(){
+    		qo.page=1
+    		this.editor.setValue(qo.getQuery().join('\n'));
+    	     setTimeout(function() {
+//     			console.log(this)
+    			this.editor.refresh();
+    		}.bind(this),10);
+    	     var div = this.$.resultViz
+    	     while (div.hasChildNodes() && div.lastChild.id != "title") {
+     			div.removeChild(div.lastChild);
+     		}
+//     	     this.$.resSpinner.active=true
+    	     
+//     		console.log(this.editor)
+			var sparqlQueryString = this.editor.getDoc().getValue(),
+		    containerID = "resultViz",
+		    Q = new sgvizler.Query()
+
+// console.log(this.$.resultViz.offsetHeight)
+// 	this.width=this.getBoundingClientRect().width*0.99;
+//     			this.height=this.getBoundingClientRect().height*0.99;
+//     			console.log(this.width,this.height)
+	// Note that default values may be set in the sgvizler object.
+	
+	
+	mySuccessFunc = function (datatable) {
+    		      /* Do what you want with the datatable */
+    		      
+//     		      this.columns=_.map(datatable.Pf,function(c){return c.label})
+//     		      var tmpData = [];
+//     		      for ( i = 0; i<datatable.Nf.length; i++){
+//     		    	  currntRow=[]
+//     		    	  for (j=0;j<datatable.Nf[i].c.length;j++){
+//     		    		  currntRow.push(datatable.Nf[i].c[j].v)
+//     		    	  }
+//     		    	  tmpData.push(currntRow)
+//     		      }
+    			console.log(datatable)
+//     			console.log(tmpData)
+//     			this.data=tmpData;
+
+			console.log(this.$.gTable)
+				this.$.gTable.data=[["Year", "Things", "Stuff"],
+				                    ["2004", 1000, 400],
+				                    ["2005", 1170, 460],
+				                    ["2006", 660, 1120],
+				                    ["2007", 1030, 540]];
+				
+    		    
+    		    }.bind(this),
+    		    myFailFunc = function (datatable) {
+    		      /* Handle the failue */
+    		    	console.log(datatable)
+    		    };
+	
+	var width =document.documentElement.clientWidth * 0.99   //- margin.right;
+	var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
+	console.log(width,height)
+//	    try {
+//	    	Q.onFail(errorQuery);
+//	    	Q.addListener('onFail',errorQuery);
+	    	Q.query(sparqlQueryString)
+	    	.endpointURL(this.ss.uri)
+	    	.chartHeight(parseInt(height))
+	    	.chartWidth(parseInt(width))
+	    	.chartFunction("google.visualization.Table") 
+	    	.getDataTable(mySuccessFunc, myFailFunc);
+// 	        .draw(this.$.resultViz);//.onFail(function(d){console.log(d)});
+//	    }
+	this.async(this.getCount);
+	
+			 
+    		
+//     		// Note that default values may be set in the sgvizler object.
+// //    	    try {
+// //    	    	Q.onFail(errorQuery);
+// //    	    	Q.addListener('onFail',errorQuery);
+//     	    	Q.query(sparqlQueryString)
+// //     	    	.chartHeight(parseInt(height*0.80))
+// //     	    	.chartWidth(parseInt(trueW*0.99))
+// //    	    	.chartFunction(charType) 
+//    	    	.getDataTable(mySuccessFunc, myFailFunc); 
+//     	        .draw("resultViz");//.onFail(function(d){console.log(d)});
+//    	    }
+//    	    catch(err) {
+//    	    	window.alert(err.message);
+//    	    	console.log(err.message);
+////    	        document.getElementById("demo").innerHTML = err.message;
+//    	    }
+
+
+
+    		
+    		
+    		
+    	},
+updateQueryPagin:function(){
+    		
+    		this.editor.setValue(qo.getQuery().join('\n'));
+    	     setTimeout(function() {
+    			this.editor.refresh();
+    		}.bind(this),10);
+    	     var div = this.$.resultViz
+    	     while (div.hasChildNodes() && div.lastChild.id != "title") {
+     			div.removeChild(div.lastChild);
+     		}
+
+			var sparqlQueryString = this.editor.getDoc().getValue(),
+		    containerID = "resultViz",
+		    Q = new sgvizler.Query()
+
+	var width =document.documentElement.clientWidth * 0.99   //- margin.right;
+	var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
+	console.log(width,height)
+//	    try {
+//	    	Q.onFail(errorQuery);
+//	    	Q.addListener('onFail',errorQuery);
+	    	Q.query(sparqlQueryString)
+	    	.endpointURL(this.ss.uri)
+	    	.chartHeight(parseInt(height))
+	    	.chartWidth(parseInt(width))
+	    	.chartFunction("google.visualization.Table") 
+//	    	.getDataTable(mySuccessFunc, myFailFunc);
+	        .draw(this.$.resultViz);//.onFail(function(d){console.log(d)});
+
+    		
+    	},
+    	dataChanged:function(){
+    		
+    		/* this.$.sortTable.columns=this.columns
+    		this.$.sortTable.data=this.data */
+    	},
+    	domReady:function(){
+//     		this.width=this.getBoundingClientRect().width*0.99;
+// 			this.height=this.getBoundingClientRect().height*0.99;
+// 			console.log(this.width,this.height)
+// 			console.log(this.$.principal.offsetWidth)
+// 			console.log(this.$.principal.offsetHeight)
+    	},
+    	getCount:function(){
+    		this.count=-1;
+    		var stringQuery=qo.getCountQuery().join('\n');
+    		var Qcount = new sgvizler.Query();
+    		
+    		var mySuccessFunc = function (datatable) {
+    	    /* Do what you want with the datatable */
+    			
+    		console.log(datatable)
+    		this.count=datatable.Nf[0].c[0].v;
+    		
+    	  }.bind(this),
+    	  myFailFunc = function (datatable) {
+    	    /* Handle the failue */
+    		console.log(datatable)
+    	  };
+    	  try{
+    		  Qcount.query(stringQuery)
+        	  .getDataTable(mySuccessFunc, myFailFunc)
+    		 }
+    		 catch(e){
+    		  alert('An error has occurred: '+e.message)
+    		 }
+    	  
+    	  
+    	},
+    	launchCustomQuery:function(){
+    		var div = this.$.resultViz
+   	     while (div.hasChildNodes() && div.lastChild.id != "title") {
+    			div.removeChild(div.lastChild);
+    		}
+//    	     this.$.resSpinner.active=true
+   	     
+//    		console.log(this.editor)
+			var sparqlQueryString = this.editor.getDoc().getValue(),
+		    containerID = "resultViz",
+		    Q = new sgvizler.Query()
+
+//console.log(this.$.resultViz.offsetHeight)
+//	this.width=this.getBoundingClientRect().width*0.99;
+//    			this.height=this.getBoundingClientRect().height*0.99;
+//    			console.log(this.width,this.height)
+	// Note that default values may be set in the sgvizler object.
+	
+	var width =document.documentElement.clientWidth * 0.99   //- margin.right;
+	var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
+	console.log(width,height)
+//	    try {
+//	    	Q.onFail(errorQuery);
+//	    	Q.addListener('onFail',errorQuery);
+	    	Q.query(sparqlQueryString)
+	    	.endpointURL(this.ss.uri)
+	    	.chartHeight(parseInt(height))
+	    	.chartWidth(parseInt(width))
+	    	.chartFunction("google.visualization.Table") 
+//	    	.getDataTable(mySuccessFunc, myFailFunc);
+	        .draw(this.$.resultViz);//.onFail(function(d){console.log(d)});
+//	    }
+	this.count=null;
+	this.selected = 1;
+    	},
+    	ready:function(a){
+    	 this.editor = CodeMirror.fromTextArea(this.$.code, {
+    	        mode: "application/x-sparql-query",
+    	        matchBrackets: true
+    	      });
+
+    		console.log(this.editor)
+    		setTimeout(function() {
+    			console.log(this)
+    			this.editor.refresh();
+    		}.bind(this),100); 
+    		
+    		this.width=this.getBoundingClientRect().width*0.99;
+			this.height=this.getBoundingClientRect().height*0.99;
+// 			console.log(this.width,this.height)
+// 			this.$.attMand.addEventListener('change', function () {
+// 			    this.curAttMandatoryChanged();
+// 			  }); 
+			
+    	}
+    	
+    })
+    </script>
+    </polymer-element>

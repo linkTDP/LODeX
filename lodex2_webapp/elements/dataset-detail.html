@@ -1,0 +1,27 @@
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/core-collapse/core-collapse.html">
+<polymer-element name="dataset-detail" attributes="name uri triples" extends="paper-item" noscript>
+<template>
+<style>
+div{
+	font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+	color:black;
+}
+</style>
+<div horizontal layout>
+<template if={{name}}>
+<div flex>{{name}}</div>
+</template>
+<template if={{!name}}>
+<div flex>{{uri}}</div>
+</template>
+<template if={{triples}}>
+<div flex>{{triples}} triples</div>
+</template>
+
+</div>
+
+
+
+</template>
+</polymer-element>

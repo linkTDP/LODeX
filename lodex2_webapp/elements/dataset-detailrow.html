@@ -1,0 +1,32 @@
+
+<polymer-element name="dataset-detailrow" attributes="name uri triples" noscript>
+<template>
+<style>
+div{
+	font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+	color:black;
+}
+</style>
+<tr>
+<td>
+	<template if={{name}}>
+	<div flex>{{name}}</div>
+	</template>
+	<template if={{!name}}>
+	<div flex>{{uri}}</div>
+
+</template>
+</td>
+<td>
+<template if={{triples}}>
+<div flex>{{triples}} triples</div>
+</template>
+</td>
+</tr>
+
+
+
+
+
+</template>
+</polymer-element>

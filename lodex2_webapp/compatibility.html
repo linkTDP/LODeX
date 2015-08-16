@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body style="text-allign:center;">
+
+  <script type="text/javascript">
+  var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+  // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+  // At least Safari 3+: "[object HTMLElementConstructor]"
+var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+var isIE = /*@cc_on!@*/false || !!document.documentMode;   // At least IE6
+
+// var output = 'Detecting browsers by ducktyping:<hr>';
+// output += 'isFirefox: ' + isFirefox + '<br>';
+// output += 'isChrome: ' + isChrome + '<br>';
+// output += 'isSafari: ' + isSafari + '<br>';
+// output += 'isOpera: ' + isOpera + '<br>';
+// output += 'isIE: ' + isIE + '<br>';
+
+if (isChrome || isOpera){
+        window.location="/lodex2/ok"
+}else{
+        var output="<h1>The new version of LODeX is fully compatible only with Chrome and Opera</h1><h2>If you want to use another browser please go to the compatibility version at this <a href='http://dbgroup.unimo.it/lodex2c'>link</a></h2><br><h2>Tutorial of the compatibility version</h2><iframe width='1280' height='720' src='//www.youtube.com/embed/bDQAQmmU3w4' frameborder='0' allowfullscreen></iframe></body>"
+        document.body.innerHTML = output;
+}
+
+
+
+
+  </script>
+  </html>
+
+
+

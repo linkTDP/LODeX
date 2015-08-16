@@ -1,0 +1,766 @@
+
+
+<link rel="import"
+	href="../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import"
+	href="../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../bower_components/core-icons/core-icons.html">
+<link rel="import"
+	href="../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../bower_components/core-signals/core-signals.html">
+<link rel="import" href="../elements/dataset-page.html">
+<link rel="import" href="../elements/ss-graph.html">
+<link rel="import" href="../elements/ss-graphsmal.html">
+
+<link rel="import" href="../elements/query-interface.html">
+<link rel="import" href="../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+
+<polymer-element name="lodex-layout" >
+<template >
+<style>
+div{
+	font-family:Lato, sans-serif;
+}
+
+.minButton {
+margin: 3.3px;
+font-size: 11pt;
+padding-left: 1px;
+}
+
+
+
+
+paper-button.colored {
+      color: #4285f4;
+      margin:3px;
+      min-width: 1em;
+    }
+
+    paper-button[raised].colored {
+      background: #0f9d58;
+      color: #fff;
+    }
+/* FAB */
+	.small {
+    	height: 30px;
+    	width: 30px;
+    	margin-bottom: 50px;
+  	}
+    .fab {
+      
+      position: relative;
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: #fff;
+      overflow: hidden;
+      transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition-delay: 0.2s;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      margin:4px;
+    }
+    
+    .fab2 {
+    position: relative;
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: #fff;
+      overflow: hidden;
+      transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition-delay: 0.2s;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      margin:4px;
+    }
+    
+    .fab.red {
+      background-color: #d23f31;
+    }
+    
+    .fab.blue {
+      background-color: #4285f4;
+    }
+    
+    .fab.green {
+      background-color: #0f9d58;
+    }
+    .fab2.green {
+      background-color: #0f9d58;
+    }
+    
+    .fab:active {
+      box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+      transition-delay: 0s;
+    }
+    
+    .fab > core-icon {
+      
+    }
+    
+    .fab > div {
+      margin: 4px;
+    }
+    
+    .fab > core-icon::shadow path {
+      fill: #fff;
+    }
+.lodexTitle {
+	margin: 1px;
+	font-size:40px;
+	font-weight:900; 
+}
+
+paper-tabs, core-toolbar {
+	background-color: #000000;
+	color: #fff;
+	box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
+	font-family:Lato, sans-serif;
+	font-weight:800; 
+	font-size:35px;
+}
+
+ a {
+background-color: #000000;
+color: #fff;
+box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
+font-family: Lato, sans-serif;
+font-weight: 800;
+font-size: 35px;
+text-align: center;
+text-decoration: none;
+}
+
+core-toolbar paper-tabs {
+	box-shadow: none;
+}
+
+paper-tabs[noink][nobar] paper-tab.core-selected {
+	color: #ffff8d;
+}
+
+paper-tabs.transparent-teal {
+	background-color: transparent;
+	color: #00bcd4;
+	box-shadow: none;
+}
+
+paper-tabs.transparent-teal::shadow #selectionBar {
+	background-color: #00bcd4;
+}
+
+paper-tabs.transparent-teal paper-tab::shadow #ink {
+	color: #00bcd4;
+}
+
+section>div {
+	height: 100%;
+	
+}
+
+core-animated-pages {
+	position: absolute;
+	top: 65px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	
+}
+#menuSS{
+	width:34%;
+	height: 100%;
+	
+}
+
+#properties{
+	
+	height:55%;
+	width:100%;
+	
+}
+
+
+
+#attributes{
+	height:45%;
+	width:62%;
+	
+}
+
+#graphSS{
+	width:66%;
+	height: 100%;
+}
+#className{
+	position:absolute;
+	top:0;
+	width:50%;
+	height: 7%;
+	font-family:Lato, sans-serif;
+	font-size:34px;
+	font-weight:900; 
+	color:black;
+}
+#graphQuery{
+	position:absolute;
+	bottom:0;
+	left:22%;
+	width:22%;
+	height: 45%;
+}
+
+.headerMenu{
+	height: 10%;
+	font-weight: 900;
+font-size: 20px;
+background-color: #F5F5F5;
+}
+
+#menuSpacer{
+	height:12%;
+}
+
+.menuSSItem{
+	height:40px;
+}
+
+.menuSSlist{
+	overflow: auto;
+	height:77%;
+	padding-right:5px;
+	font-size:11pt;
+}
+
+.menuSSlistA{
+	overflow: auto;
+	height:90%;
+	padding-right:5px;
+	font-size:11pt;
+}
+
+::-webkit-scrollbar   {
+            width:   6px;
+            height:   6px;
+}
+
+::-webkit-scrollbar-track-piece   {
+            background-color:   #ffffff;
+            -webkit-border-radius:   6px;
+}
+
+::-webkit-scrollbar-thumb:vertical   {
+            height:   6px;
+            background-color:   #666;
+            -webkit-border-radius:   6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal   {
+            width:   6px;
+            background-color:   #666;
+            -webkit-border-radius:   6px;
+}
+
+</style>
+
+
+	<core-toolbar class="dark-theme" >
+	
+	<paper-tabs id="lodexMenu" selected=0 flex horizontal center layout>
+	<template bind="{{test as t}}">
+	<template if="{{t == false}}" >
+	<div class="lodexTitle"><a href="#!/" >LODeX</a></div>
+	
+	<paper-tab role="tab" inline flex center-center horizontal layout active>
+	<template bind="{{ss as s}}">
+	<template if="{{s.id}}" >
+	<a href="#!/schemaSummary/{{s.id}}" >Schema Summary </a>
+	</template>
+	<template if="{{!s.id}}" >
+	<a href="#!/schemaSummary" >Schema Summary </a>
+	</template>
+	</template>
+	</paper-tab>
+	
+	
+	<template bind="{{reachable as r}}">
+	<template if="{{r || r === null}}" >
+	<paper-tab role="tab" inline flex center-center horizontal layout>
+	<a href="#!/refinementPanel" >Refinement Panel</a>
+	</paper-tab> 
+	
+	</template>
+	<template if="{{r == false}}" >
+	<div style="color:red">
+	endpoint not reachable
+	</div> 
+	
+	</template>
+	</template>
+	</template>
+	<template if="{{t == true}}" >
+	<div>LODeX Schema Summary</div>
+	</template>
+	</template>
+		
+	</paper-tabs> 
+<!-- 	<paper-icon-button icon="search" role="button" tabindex="0" -->
+<!-- 		aria-label="search"></paper-icon-button>  -->
+		<paper-icon-button
+		icon="info" role="button" tabindex="0" aria-label="more-vert"></paper-icon-button>
+
+	</core-toolbar>
+
+<section layout vertical is="auto-binding">
+	<core-animated-pages selected="{{ selected }}" selectedindex="0" notap>
+	<section>
+		<div >
+			<dataset-page style='width:100%'></dataset-page>
+		</div>
+	</section>
+	<section>
+	<div id="className" horizontal layout center>
+	<template if='{{currentNode}}'>
+	<template if='{{!queryStarted && reachable!==false}}'>
+		<div class="fab green">
+      		<core-icon class="small" icon="add""></core-icon>
+      		<paper-ripple class="circle recenteringTouch" fit  on-click="{{addCurrentClass}}" ></paper-ripple>
+    	</div> 
+	</template>
+	<div style="{{currentNode.name | nameFontSize}}">{{currentNode.name}}</div>
+	<div style="margin:5px;font-size:28px;">
+	{{currentNode.ni}}
+	</div>
+	<div style="margin:3px;font-size:24px;">
+	instances
+	</div>
+	</template>
+	
+	</div>
+		<div horizontal layout wrap">
+		<div id="menuSS">
+			<div id="properties">
+			<div id="menuSpacer"></div>
+			<div class="headerMenu">
+			Properties
+			</div>
+			<div  class="menuSSlist" >
+			<template repeat="{{propertylist.entranti}}">
+				<div class="menuSSItem" horizontal layout center flex>
+					<template if="{{isInQuery}}">
+						<div class="fab2 green">
+					      <div class="minButton">M</div>
+					      <paper-ripple class="circle recenteringTouch" fit on-click="{{addProperty}}" pos={{pos}} mandatory=1 entranti=1 nodeID={{index}}></paper-ripple>
+					    </div>
+						<div class="fab2 green">
+					      <div class="minButton">O</div>
+					      <paper-ripple class="circle recenteringTouch" fit on-click="{{addProperty}}" pos={{pos}} mandatory=0 entranti=1 nodeID={{index}}></paper-ripple>
+					    </div>
+					</template>
+					<div center flex> <svg width="12" height="12"> <rect width="12" height="12" style="fill:{{colProp}};" /></svg>  {{name}}</div>
+					<dvi ><core-icon icon="arrow-back"></core-icon></dvi>
+					<div center flex style="text-align:center;">{{source}}</div>
+					<div >{{card}}</div>
+				</div>
+			</template>
+			<template repeat="{{propertylist.uscenti}}">
+				<div class="menuSSItem" horizontal  layout center flex>
+					<template if="{{isInQuery}}">
+						<div class="fab2 green">
+					      <div class="minButton">M</div>
+					      <paper-ripple class="circle recenteringTouch" fit on-click="{{addProperty}}" pos={{pos}} mandatory=1 entranti=0 nodeID={{index}}></paper-ripple>
+					    </div>
+						<div class="fab2 green">
+					      <div class="minButton">O</div>
+					      <paper-ripple class="circle recenteringTouch" fit on-click="{{addProperty}}" pos={{pos}} mandatory=0 entranti=0 nodeID={{index}}></paper-ripple>
+					    </div>
+					</template>
+					<div  center flex ><svg width="12" height="12"> <rect width="12" height="12" style="fill:{{colProp}};" /></svg>  {{name}}</div>
+					<dvi ><core-icon icon="arrow-forward"></core-icon></dvi>
+					
+					<div  center flex style="text-align:center;">{{target}}</div>
+					<div >{{card}}</div>
+				</div>
+			</template>
+			</div>
+			</div>
+			<div id="attributes">
+			<div class="headerMenu">
+			Attributes
+			</div>
+			<div  class="menuSSlistA" >
+			<template repeat="{{currentNode.att}}">
+			<div class="menuSSItem" horizontal  layout  center>
+					<template if="{{isInQuery}}">
+						<div class="fab2 green">
+					      <div class="minButton">M</div>
+					      <paper-ripple class="circle recenteringTouch" fit on-click="{{addAttr}}" name={{p}} fullName={{fullName}} mandatory=0 ></paper-ripple>
+					    </div>
+						<div class="fab2 green">
+					      <div class="minButton">O</div>
+					      <paper-ripple class="circle recenteringTouch" fit on-click="{{addAttr}}" name={{p}} fullName={{fullName}} mandatory=1></paper-ripple>
+					    </div>
+					</template>
+					<template if="{{!isInQuery}}">
+						<template if="{{setted}}">
+						<template if="{{optional}}">
+							<div style="margin:5px;"><b>O</b></div>
+						</template>
+						<template if="{{!optional}}">
+							<div style="margin:5px;"><b>M</b></div>
+						</template>
+						
+						</template>
+					</template>
+					<div> <svg width="12" height="12"> <rect width="12" height="12" style="fill:{{color}};" /></svg>  {{p}}</div>
+			
+					<div flex style="text-align:right;">{{n}}</div>
+			
+				</div>
+			</template>
+			</div>
+			</div>
+		</div>
+		
+		<div id="graphSS" on-overnode={{overNode}}>
+			<ss-graph id=graphss ss={{ss}} test={{test}}></ss-graph></div>
+		</div>
+		
+		<div id="graphQuery" on-smouseover={{sMouseOver}} on-clearquery={{clearQuery}} on-generate={{generate}}>
+		<ss-graphsmal  id=graphss2 ss={{ss}} >
+		</ss-graphsmal>
+		<paper-toast id="endNotReach" duration=7000 text="The endpoint is not reachable!! It is not possible to launch the query"></paper-toast> 
+		</div>
+		
+	</section>
+	<section >
+	<div on-removenode={{removeNodeFquery}}>
+		<query-interface id="queryint" ss={{ss}} query={{curQCN}}></query-interface>
+		</div>
+		</div>
+	</section>
+	
+	</core-animated-pages>
+</section>
+<core-signals on-core-signal-gotoss="{{goToSS}}"></core-signals>
+<core-signals on-core-signal-gotosstest="{{goToSStest}}"></core-signals>
+<core-ajax id="getSS" url="/lodex2/getData/{{currentId}}" handleas="json" on-core-response="{{getSS}}">  
+</template> 
+    
+
+<script>
+	Polymer({
+		selected : 0,
+		ss :  {},
+		currentId : 0,
+		currentNode : null,
+		propertylist: {},
+		queryStarted:false,
+		curQCN:[],
+		reachable:null,
+		test:false,
+		removeNodeFquery:function(e){
+// 			console.log(e.detail)
+			this.$.graphss.removeNode2(e.detail)
+		},
+		nameFontSize:function(value){
+			if (value.length > 25){
+				return "font-size:28px"
+			}else{
+				return "font.size:34px"
+			}
+		},
+		// my custom filter function to use in looping objects
+		  getKeys : function(o){
+		    return Object.keys(o);
+		},
+		generate:function(){
+			this.selected=2;
+			document.location.href = "#!/refinementPanel";
+			this.$.queryint.updateQuery();
+			
+		},
+		clearQuery:function(){
+			qo=new QuerOrchestrator();
+			this.curQCN=[];
+			this.currentNode=null;
+			this.queryStarted=false;
+			this.propertylist={};
+			this.$.queryint.queryChanged()
+			_.each(this.ss.attributes,function(a){a.setted=false})
+    	},
+		addCurrentClass:function(){
+			this.queryStarted=true;
+			
+			
+			console.log(this.currentNode);
+			var curClasNode = new ClassNode(this.currentNode.fullName,this.currentNode.name,true);
+			console.log(curClasNode);
+			qo.addNode(curClasNode);
+			this.curQCN.push({index:qo.getIndex(),nodeId:this.currentNode.index,name:this.currentNode.name,attributes:new Array(),opt:false,param:qo.getCurClasses()[0].getParameter(),property:null,qoQI:-1});
+			console.log(this.curQCN);
+			console.log(qo);
+			this.currentNodeChanged()
+			//TODO
+			this.$.graphss2.addNode2(this.currentNode.name,colorGlobal(this.currentNode.vocab),this.currentNode.index);
+			this.currentNode.param=qo.getCurClasses()[0].getParameter().substr(1)
+			console.log(this.currentNode)
+			this.currentNodeChanged()
+			
+			
+		},
+		addAttr:function(event,detail,targhet){
+			var curQnode=_.find(this.curQCN,function(a){return a.nodeId==this.currentNode.index && a.param.substr(1)==this.currentNode.param }.bind(this))
+			var index=curQnode.index
+			console.log(targhet.attributes)
+			var name=targhet.attributes['name'].value
+			var property=targhet.attributes['fullname'].value
+			var optional=(targhet.attributes['mandatory'].value==1)?true:false
+			console.log(index,name,property,optional)
+			var paramId=qo.addAttributeToNode(index,name,property,optional);
+			this.curQCN[index].attributes.push({opt:optional,name:name,param:paramId,fullName:property});
+			this.currentNodeChanged()
+			this.$.queryint.queryChanged()
+		},
+		addProperty:function(event,detail,targhet){
+			console.log(targhet.attributes)
+			var pos=targhet.attributes['pos'].value
+			var mandotary=targhet.attributes['mandatory'].value
+			var entranti = targhet.attributes['entranti'].value
+			var nodeID= targhet.attributes['nodeid'].value
+// 			var pos=event.path[0].attributes[3].value
+// 			var mandotary=event.path[0].attributes[4].value
+// 			var entranti = event.path[0].attributes[5].value
+// 			var nodeID= event.path[0].attributes[6].value
+			var par=null;
+			var nodInd=null;
+			var name=null;
+			var property=null;
+			var curQnode=_.find(this.curQCN,function(a){return a.nodeId==this.currentNode.index}.bind(this))
+// 			if (curQnode === undefined){
+// 				curQnode=_.find(this.curQCN,function(a){return a.nodeId==nodeID}.bind(this))
+// 			}
+			if (entranti == 1){
+				
+				currentProp=_.find(this.propertylist.entranti,function(a){return a.pos==pos}.bind(this))
+				var par=qo.addLinkedNode(currentProp.ClassfullName,currentProp.source,true,currentProp.fullName,true,(mandotary==1)?false:true,curQnode.index);
+				nodInd=currentProp.index
+				name=currentProp.source
+				property=currentProp.fullName
+			}else{
+				currentProp=_.find(this.propertylist.uscenti,function(a){return a.pos==pos}.bind(this))
+				var par=qo.addLinkedNode(currentProp.ClassfullName,currentProp.target,true,currentProp.fullName,false,(mandotary==1)?false:true,curQnode.index);
+				nodInd=currentProp.index
+				name=currentProp.target
+				property=currentProp.fullName
+			}
+			this.curQCN.push({param:par,index:qo.getIndex(),nodeId:nodInd,name:name,attributes:new Array(),opt:(mandotary==1)?false:true,property:property,othInx:this.currentNode.index,qoQI:curQnode.index,othParam:qo.getCurClasses()[curQnode.index].getParameter()});
+			
+// 			var par=qo.addLinkedNode(URI,name,parEnabl,property,Boolean.parse(after),Boolean.parse(optional),index);
+// 			curQCN.push({param:par,index:qo.getIndex(),nodeId:nodInd,name:name,attributes:new Array(),opt:Boolean.parse(optional),property:property,othInx:otherInx,qoQI:parseInt(index),othParam:qo.getCurClasses()[index].getParameter()});
+			
+// 			var idClass = _.find(curQCN,function(a){return a.param==par}).nodeId;
+			
+			var newNode=_.find(this.ss.nodes,function(nod){return nod.index == nodeID}.bind(this))
+			newNode.param=par.substr(1)
+			
+			this.$.graphss.nodeMouseOver(newNode,par);
+			
+// 			propEdge.push({par1:par,par2:qo.getCurClasses()[index].getParameter(),propertu:property,ind1:otherInx,ind2:nodInd})
+			
+			this.$.graphss2.addNode2(par.substr(1),colorGlobal(_.find(this.ss.nodes,function(nod){return nod.index == nodInd}).vocab),nodInd);
+			this.$.graphss2.addLink2(_.find(this.curQCN,function(a){return a.nodeId==this.currentNode.index}.bind(this)).param.substr(1), par.substr(1));
+
+			
+			
+		},
+		colorize: {
+	    	  toDom: function(value) {
+	    		    return colorGlobal(value);
+	    		  }
+	    },
+		goToSS:function(e, detail, sender){
+			console.log(detail.id)
+			if (this.ss.id == detail.id){
+				
+			}else{
+				this.reachable=null;
+				this.currentId=detail.id;
+				this.$.getSS.go();
+			}
+			this.selected = 1;
+		},
+		goToSStest:function(e, detail, sender){
+			console.log(detail.id)
+			this.test=true;
+			if (this.ss.id == detail.id){
+				
+			}else{
+				this.reachable=null;
+				this.currentId=detail.id;
+				this.$.getSS.go();
+			}
+			this.selected = 1;
+		},
+		getSS:function(e){
+			this.ss=e.detail.response
+			console.log(this.ss)
+			this.curQCN=[];
+			this.currentNode = null;
+			this.propertylist = {};
+			this.queryStarted=false;
+			width=this.getBoundingClientRect().width*0.99;
+			height=this.getBoundingClientRect().height*0.99;
+// 			console.log(width,height)
+			this.testSoundnessEndpoint();
+		},
+		testSoundnessEndpoint:function(){
+			var query = "SELECT ?s ?p ?o {?s ?p ?o} LIMIT 1"
+			var queryUrl = encodeURI( this.ss.uri+"?query="+query+"&format=json" );
+			$.ajax({
+		        dataType: "jsonp",  
+		        url: queryUrl,
+		        timeout:2000,
+		        success: function( _data ) {
+		        	console.log('succes')
+		            var results = _data.results.bindings;
+		            if (results.length > 0){
+		            	this.reachable=true
+		            }
+		        }.bind(this),
+				error: function(jqXHR,error, errorThrown) {  
+					this.reachable=false;
+	            }.bind(this)
+		    });
+		},
+		reachableChanged:function(){
+			console.log(this.reachable)
+			if (this.reachable === false){
+				this.$.endNotReach.show();
+			}
+// 			alert(this.reachable)
+		},
+		overNode:function(e, detail, sender) {
+// 	        console.log(e,detail,sender)
+	        this.currentNode=this.$.graphss.selected;
+// 	        console.log(this.currentNode)
+	      },
+	    sMouseOver:function(e, detail, sender) {
+// 	    	console.log(e,detail,sender)
+	    	var nodeID=e.detail.nodeID
+	    	this.currentNode=_.find(this.ss.nodes,function(a){return a.index== nodeID}.bind(this))
+	    	this.currentNode.param=e.detail.id
+	    	this.currentNodeChanged()
+	    },
+	    currentNodeChanged:function(){
+	    	  if (this.currentNode != null){
+		    	  var entranti=[]
+		    	  var uscenti=[]
+		    	  var edges=this.ss.links
+		    	  var pos=0;
+		    	  for(i=0; i<edges.length;i++){
+		    	    	if(edges[i].source.index == this.currentNode.index){
+		    	    		for(j=0;j<edges[i].label.length;j++){
+		    	    			tmp=edges[i].label[j]
+		    	    			tmp.target=edges[i].target.name
+		    	    			tmp.ClassfullName=edges[i].target.fullName
+		    	    			tmp.index=edges[i].target.index
+		    	    			tmp.card=(tmp.np/this.currentNode.ni).toFixed(2)
+		    	    			tmp.colProp=colorGlobal(tmp.vocab)
+		    	    			tmp.pos=pos
+		    	    			pos=pos+1;
+		    	    			tmp.nodeId=-1;
+		    	    			if(_.some(this.curQCN,function(node){return node.nodeId==this.currentNode.index}.bind(this))){
+		    	    				tmp.isInQuery=true
+		    	    				
+		    	  	    	  	}else{
+	// 	    	  	    	  		if(_.some(this.curQCN,function(node){return node.nodeId==tmp.index}.bind(this))){
+	// 	    	    				tmp.isInQuery=true
+	// 	    	    				tmp.nodeID=_.find(this.curQCN,function(node){return node.nodeId==tmp.index}.bind(this)).nodeId
+	// 	    	  	    	  		}else{
+		    	  	    	  		tmp.isInQuery=false
+	// 	    	  	    	  		}
+		    	  	    	  	}
+		    	    			
+		    	    			uscenti.push(tmp)
+		    	    		}
+		    	    	}
+		    	    	else{
+		    	    		if(edges[i].target.index == this.currentNode.index){
+		    	    			for(j=0;j<edges[i].label.length;j++){
+		    	    				tmp=edges[i].label[j]
+		    	    				tmp.source=edges[i].source.name
+		    	    				tmp.ClassfullName=edges[i].source.fullName
+		    	    				tmp.index=edges[i].source.index
+		    	    				tmp.colProp=colorGlobal(tmp.vocab)
+		    	    				tmp.card=(tmp.np/this.currentNode.ni).toFixed(2)
+		    	    				tmp.pos=pos
+		    	    				pos=pos+1;
+		    	    				if(_.some(this.curQCN,function(node){return node.nodeId==this.currentNode.index}.bind(this))){
+			    	    				tmp.isInQuery=true
+			    	  	    	  	}else{
+// 			    	  	    	  	if(_.some(this.curQCN,function(node){return node.nodeId==tmp.index}.bind(this))){
+// 			    	    				tmp.isInQuery=true
+// 			    	  	    	  	}else{
+			    	  	    	  	tmp.isInQuery=false
+// 			    	  	    	  	}
+			    	  	    	  	}
+			    	    			
+		    	        			entranti.push(tmp)
+	
+		    	        		}
+		    	    		}
+		    	    	}
+		    	    }
+		    	  entranti.sort(function (a, b) {
+		    	    	return  b.np - a.np;
+		    	    });
+		    	    uscenti.sort(function (a, b) {
+		    	    	return  b.np - a.np;
+		    	    });
+	
+		    	    
+		    	  this.currentNode.att=this.currentNode.att.map(function(a){
+		    		  a.color=colorGlobal(a.vocab);
+		    		  if(_.some(this.curQCN,function(node){return (node.nodeId==this.currentNode.index && node.param.substr(1)==this.currentNode.param)}.bind(this))){
+		    			  tmpCurNode=_.find(this.curQCN,function(node){return (node.nodeId==this.currentNode.index && node.param.substr(1)==this.currentNode.param)}.bind(this))
+// 		    			  console.log(tmpCurNode)
+		    			  tmpAtt=null;
+		    			  
+		    			  for (i=0;i<tmpCurNode.attributes.length;i++){
+// 		    				  console.log(tmpCurNode.attributes[i])
+		    				  if(tmpCurNode.attributes[i].fullName==a.fullName){
+		    					  tmpAtt=tmpCurNode.attributes[i]
+		    				  }
+		    			  }
+// 		    			  tmpAtt=_.find(tmpCurNode.attributes,function(b){return b.fullName==a.fullName}.bind(a))
+// 		    			  console.log(tmpAtt)
+		    			  if (tmpAtt!=null){
+		    				  a.setted=true
+		    				  a.isInQuery=false
+		    				  a.optional=tmpAtt.opt
+		    			  }else{
+		    				  a.setted=false
+		    			  	a.isInQuery=true
+		    			  }
+  	    				
+  	  	    	  		}else{
+  	  	    	  		a.setted=false
+  	  	    	  		a.isInQuery=false
+  	  	    	  		}
+		    		  return a;}.bind(this))
+		    	  this.propertylist.entranti=entranti;
+		    	  this.propertylist.uscenti=uscenti;
+	    	  }
+	      }
+	});
+</script> 
+<script src="../bower_components/page/page.js"></script>
+<script src="../js/app.js"></script>
+</polymer-element>

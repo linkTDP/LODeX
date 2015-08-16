@@ -1,0 +1,215 @@
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/core-icons/core-icons.html">
+<polymer-element name="ss-graphsmal" attributes="ss">
+    
+    <template>
+    <style>
+    #graph2{
+    	height:80%;
+    	width:100%;
+    }
+    #header{
+    	height:20%;
+    	width:100%;
+    	backgorund:red;
+    }
+    #shaGraph{
+    	height:100%;
+    	width:100%;
+    }
+    div{
+	font-family:Lato, sans-serif;
+}
+    .link {
+  stroke: black;
+  stroke-opacity: .6;
+}
+paper-icon-button.hover:hover {
+        background: #eee;
+        border-radius: 50%;
+      }
+      paper-button.colored {
+      background: #0f9d58;
+      color: #fff;
+    }
+    </style>
+    <paper-shadow id="shaGraph" z="1">
+    	<div horizontal layout center id="header">
+    	<template if="{{nodes2.length > 0}}">
+    	<paper-icon-button class="hover" icon="delete" title="with :hover style" on-click={{clearQuery}}></paper-icon-button>
+    	<paper-button raised class="colored" on-click={{generate}}>Generate</paper-button>
+    	</template>
+    	</div>
+      <div id="graph2">
+    </div>
+    </paper-shadow>
+    
+    </template>
+    <script>
+    var vis;
+    Polymer({
+        	width:0,
+        	height:0,
+        	eightyWeight:0,
+        	nodes2:null,
+        	links2:null,
+        	force2:null,
+        	over:null,
+        	generate:function(){
+        		this.fire('generate');
+        	},
+        	clearQuery:function(){
+        		this.fire('clearquery');
+        		this.node2=null;
+        		this.link2=null;
+        		this.ssChanged();
+        	},
+        	overChanged:function(){
+        		this.fire('smouseover',this.over)
+        	},
+        	ssChanged: function(attrName, oldVal, newVal) {
+        		if (!isEmpty(this.ss)){
+				
+					
+	        		// set up the D3 visualisation in the specified element
+	        	    var w = this.getBoundingClientRect().width*0.99,
+	        	        h = this.getBoundingClientRect().height*0.79;
+					console.log(w)
+					
+					var div = this.$.graph2
+	        		while (div.hasChildNodes()) {
+	        			div.removeChild(div.lastChild);
+	        		}
+					
+	        	    vis = d3.select(this.$.graph2).append("svg:svg")
+	        	        .attr("width", w)
+	        	        .attr("height", h);
+	
+	        	    this.force2 = d3.layout.force()
+	        	        .gravity(.05)
+	        	        .distance(100)
+	        	        .charge(-100)
+	        	        .size([w, h]);
+	
+	        	    this.nodes2 = this.force2.nodes(),
+	        	    this.links2 = this.force2.links();
+	        	    
+	        	    this.update()
+	        		}
+
+        	},
+        	update:function () {
+
+                var node2 = vis.selectAll("g.node")
+                    .data(this.nodes2, function(d) { return d.id;});
+
+                var nodeEnter = node2.enter().append("g")
+                    .attr("class", "node")
+                    .call(this.force2.drag);
+
+                
+                nodeEnter.append("svg:circle")
+        	      .attr("class", "circle")
+        	      .attr("stroke","black" )
+        	      .attr("stroke-width", "1.5px")
+        	      .attr("r", 10)
+        	      .style("fill",function(d) {return d.color})
+        	      .on("mouseover",function(n){this.over=n;}.bind(this))      
+        	      
+//                    .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png")
+//                    .attr("x", "-8px")
+//                    .attr("y", "-8px")
+//                    .attr("width", "16px")
+//                    .attr("height", "16px");
+
+                nodeEnter.append("text")
+                    .attr("class", "nodetext")
+                    .attr("dx", 12)
+                    .attr("dy", ".35em")
+                    .style("font-family","Lato, sans-serif")
+        			.style("font-weight", 500)
+        			.attr("font-size", "15px")
+        			.attr("fill", "black")
+                    .text(function(d) {return d.id});
+
+                node2.exit().remove();
+                
+                var link2 = vis.selectAll("line.link")
+                .data(this.links2, function(d) { return d.source.id + "-" + d.target.id; });
+
+            link2.enter().insert("line")
+                .attr("class", "link");
+
+            link2.exit().remove();
+
+                this.force2.on("tick", function() {
+                  link2.attr("x1", function(d) { return d.source.x; })
+                      .attr("y1", function(d) { return d.source.y; })
+                      .attr("x2", function(d) { return d.target.x; })
+                      .attr("y2", function(d) { return d.target.y; });
+
+                  node2.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+                });
+
+                // Restart the force layout.
+                this.force2.start();
+            },
+         // Add and remove elements on the graph object
+            addNode2 : function (id,color,nodeID) {
+                this.nodes2.push({"id":id,"color":color,"nodeID":nodeID});
+                this.update();
+            },
+
+            removeNode2:function (id) {
+                var i = 0;
+                var n = this.findNode2(id);
+                while (i < this.links2.length) {
+                    if ((this.links2[i]['source'] === n)||(this.links2[i]['target'] == n)) this.links2.splice(i,1);
+                    else i++;
+                }
+                var index2 = this.findNode2Index(id);
+                if(index2 !== undefined) {
+                    this.nodes2.splice(index2, 1);
+                    this.update();
+                }
+            },
+
+            addLink2 : function (sourceId, targetId) {
+                var sourceNode2 = this.findNode2(sourceId);
+                var targetNode2 = this.findNode2(targetId);
+
+                if((sourceNode2 !== undefined) && (targetNode2 !== undefined)) {
+                    this.links2.push({"source": sourceNode2, "target": targetNode2});
+                    this.update();
+                }
+            },
+
+            findNode2 : function (id) {
+                for (var i=0; i < this.nodes2.length; i++) {
+                    if (this.nodes2[i].id === id)
+                        return this.nodes2[i]
+                };
+            },
+
+            findNode2Index : function (id) {
+                for (var i=0; i < this.nodes2.length; i++) {
+                    if (this.nodes2[i].id === id)
+                        return i
+                };
+            }
+        	
+    
+
+    
+        
+        })
+
+
+        
+        
+	
+    
+        </script>
+</polymer-element>
+    

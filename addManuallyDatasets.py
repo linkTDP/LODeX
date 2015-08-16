@@ -1,6 +1,6 @@
 import json
 import sys
-import extractor.util as mongo
+import extractor.util.mongo as mongo
 
 def main(argv):
     file_name="datasets.json"

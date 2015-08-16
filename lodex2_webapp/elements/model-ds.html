@@ -1,0 +1,31 @@
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<polymer-element name="model-ds" attributes="filter items storageId">
+<template>
+<core-ajax auto url="/lodex3/index"
+           handleas="json" 
+           auto
+           on-core-response="{{datasetsResponse}}">
+	</core-ajax>
+<!-- <template repeat="{{ resp.data }}">
+        <div>{{uri}}<div>
+      </template>
+    <p>{{resp}}</p> -->
+</template>
+	<script>
+	Polymer({
+		datasets:[],
+		datasetsResponse : function (e){
+			this.datasets = e.detail.response
+			console.log(this.datasets)
+			this.fire('dataset-loaded',{data:this.datasets.data});
+			this.fire('core-signal', {name: "dl", data: this.datasets.data});
+			
+		},
+		datasetsChanged: function (e){
+			console.log("changed")
+		}
+	});
+	
+	</script>
+	
+</polymer-element>

@@ -1,0 +1,240 @@
+<link rel="import" href="../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../elements/dataset-detaildiv-test.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<polymer-element name="dataset-page-test" attributes="modelDs">
+<template>
+<style>
+.main{
+	margin:10px;
+	width:100%;
+}
+#table{
+	width:100%;
+	height:93%;
+	overflow:auto;
+}
+#header{
+	width:100%;
+	height:7%; 	
+}
+
+#principal{
+	height: 100%;
+    width: 100%;
+    overflow: hidden;	
+}
+.headEl{
+	font-size:12pt;
+	text-align: center;
+	text-align: center;
+background-color: #F5F5F5;
+border-bottom: 2px;
+border-bottom-color: #000000;
+border-bottom-style: solid;
+}
+
+paper-icon-button.hover:hover {
+        background: #eee;
+        border-radius: 50%;
+      }
+
+</style>
+<core-ajax auto url="/lodex2/indexTest"
+           handleas="json" 
+           auto
+           on-core-response="{{endpointsResponse}}">
+	</core-ajax>
+<core-ajax id="getComplete" url="/lodex2/indexTestComplete" handleas="json" on-core-response="{{endpointsResponseComplete}}">
+</core-ajax>
+
+
+
+<div id="principal">
+	<div id="header" class="header" horizontal layout>
+		<div horizontal center layout class="headEl" style="width:40%" >
+<!-- 		<paper-button raised on-click="{{sortTripl}}">Sort Triples</paper-button> -->
+			<div>
+			<paper-icon-button class="hover" on-click={{descName}} icon="expand-more" title="with :hover style">
+			</paper-icon-button>
+			</div>
+			<div flex style="text-allign:center"><b>Dataset Name</b></div>
+			<div>
+			<paper-icon-button on-click={{ascName}} class="hover" icon="expand-less" title="with :hover style">
+			</paper-icon-button>
+			</div>
+		</div>
+		<div horizontal center layout class="headEl" style="width:13%">
+			<div>
+			<paper-icon-button class="hover" on-click={{descTriple}} icon="expand-more" title="with :hover style">
+			</paper-icon-button>
+			</div>
+			<div flex style="text-allign:center"><b>Triples</b></div>
+			<div>
+			<paper-icon-button on-click={{ascTriple}} class="hover" icon="expand-less" title="with :hover style">
+			</paper-icon-button>
+			</div>
+		</div>
+		<div horizontal center layout class="headEl" style="width:13%">
+			<div>
+			<paper-icon-button class="hover" on-click={{descClass}} icon="expand-more" title="with :hover style">
+			</paper-icon-button>
+			</div>
+			<div flex style="text-allign:center"><b>Class Number</b></div>
+			<div>
+			<paper-icon-button on-click={{ascClass}} class="hover" icon="expand-less" title="with :hover style">
+			</paper-icon-button>
+			</div>
+		</div>
+		
+		<div horizontal on-click={{descProp}} center layout class="headEl" style="width:13%">
+			<div>
+			<paper-icon-button class="hover" icon="expand-more" title="with :hover style">
+			</paper-icon-button>
+			</div>
+			<div flex style="text-allign:center"><b>Properties Number</b></div>
+			<div>
+			<paper-icon-button on-click={{ascProp}} class="hover" icon="expand-less" title="with :hover style">
+			</paper-icon-button>
+			</div>
+		</div>
+		
+		<div horizontal center layout class="headEl" flex>
+			<div>
+			<paper-icon-button on-click={{descInst}} class="hover" icon="expand-more" title="with :hover style">
+			</paper-icon-button>
+			</div>
+			<div flex style="text-allign:center"><b>Instances Number</b></div>
+			<div>
+			<paper-icon-button on-click={{ascInst}} class="hover" icon="expand-less" title="with :hover style">
+			</paper-icon-button>
+			</div>
+		</div>
+		
+		<div class="headEl" style="width:128px;">
+		
+		</div>
+	</div>
+	
+	<div id = "table">
+	<template repeat="{{endpoint in endpoints }}">
+
+		<dataset-detaildiv-test endpoint={{endpoint}} ></dataset-detaildiv-test>
+
+	</template>
+	</div>
+</div>
+
+
+
+</template>
+
+
+	<script>
+
+	Polymer({
+		
+		endpoints:[],
+		endpointsResponse : function (e){
+// 			console.log(e.detail.response.data)
+			this.endpoints = e.detail.response.data
+// 			this.endpoints = this.endpoints.map(function (a){
+// 				a.detail=false;
+// 				a.propList=[{property:'a',count:10},{property:'a',count:10},{property:'a',count:10},{property:'a',count:10}];
+// 				a.classList=[{clas:'a',count:10},{clas:'a',count:10},{clas:'a',count:10},{clas:'a',count:10}];
+// 				return a});
+			this.$.getComplete.go();
+		},
+		datasetLoaded:function(e){
+			this.model = e.detail
+			console.log(e)
+		},
+		ascTriple:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.triples!=null?b.triples:(b.id - 100000000)
+			    	var a=	a.triples!=null?a.triples:(a.id - 100000000)	
+				return  b-a;});
+		},
+		descTriple:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.triples!=null?b.triples:(b.id - 100000000)
+			    	var a=	a.triples!=null?a.triples:(a.id - 100000000)		
+				return  a-b;});
+		},
+		ascClass:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.classesCount!=null?b.classesCount:(b.id - 10000)
+			    	var a=	a.classesCount!=null?a.classesCount:(a.id - 10000)		
+				return  b-a;});
+		},
+		descClass:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.classesCount!=null?b.classesCount:(b.id + 10000)
+			    	var a=	a.classesCount!=null?a.classesCount:(a.id + 10000)		
+				return  a-b;});
+		},
+		ascProp:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.propCount!=null?b.propCount:(b.id - 10000)
+			    	var a=	a.propCount!=null?a.propCount:(a.id - 10000)		
+				return  b-a;});
+		},
+		descProp:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.propCount!=null?b.propCount:(b.id + 10000)
+			    	var a=	a.propCount!=null?a.propCount:(a.id + 10000)		
+				return  a-b;});
+		},
+		ascInst:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.instances!=null?b.instances:(b.id - 10000000)
+			    	var a=	a.instances!=null?a.instances:(a.id - 10000000)		
+				return  b-a;});
+		},
+		descInst:function(){
+			this.endpoints.sort(function(a, b) { 
+			    var b = b.instances!=null?b.instances:(b.id + 10000000)
+			    	var a=	a.instances!=null?a.instances:(a.id + 10000000)		
+				return  a-b;});
+		},
+		ascName:function(){
+			this.endpoints.sort(function(a, b) {
+				var b = b.name!=null?b.name:b.uri
+				var a=	a.name!=null?a.name:a.uri
+				if (a < b) return 1;
+				if (a > b) return -1;
+				return 0;
+				});
+		},
+		descName:function(){
+			this.endpoints.sort(function(a, b) { 
+				var b = b.name!=null?b.name:b.uri
+						var a=	a.name!=null?a.name:a.uri
+						if (a < b) return -1;
+						if (a > b) return 1;
+						return 0;});
+		},
+		endpointsResponseComplete: function (e){
+			this.endpoints = e.detail.response.data
+			this.sortClasProp()
+		},
+		sortClasProp: function (){
+			 
+			this.endpoints =this.endpoints.map(function (a){
+				if (_.has(a, 'classList') && a.classList != null && _.has(a.classList[0], 'nInstance')){
+					a.classList=a.classList.sort(function(a, b) { 
+					    return b.nInstance - a.nInstance  ;})
+				}
+				if (_.has(a, 'propList') && a.propList != null && _.has(a.propList[0], 'count')){
+					a.propList=a.propList.sort(function(a, b) { 
+					    return b.count - a.count  ;})
+				}
+			return a;
+			});
+		}
+	
+	});
+	
+	</script>
+	
+</polymer-element>

@@ -1,0 +1,512 @@
+<polymer-element name="ss-graph" attributes="ss" test="test">
+    
+    <template>
+    <style>
+    #graph{
+    	height:100%;
+    	width:100%;
+    }
+    
+    
+
+    
+    .link {
+  stroke: black;
+  stroke-opacity: .6;
+}
+#title {
+	font-family:Lato, sans-serif;
+	font-size:30px;
+	font-weight:700; 
+	color:black;
+}
+    </style>
+    <template bind="{{test as t}}">
+    <template if="{{t == false || t == unidefined}}" >
+    <div id="title" style="position: absolute; bottom: 5px; right: 5px; width: {{eightyWeight}}px; text-align:right;">
+    {{ss.title}}
+ 	 </div>
+ 	 </template>
+ 	 </template>
+    <div id="graph">
+    </div>
+    </template>
+    <script>
+    
+    var colorGlobal=d3.scale.category20();
+    var svg;
+    var qo;
+    var ssGlobal;
+	var fill = d3.scale.category20();
+	var stroke_width = 1.5;
+	var tick = false;
+	var linkDistance=150;
+	function isEmpty(obj) {
+
+	    // null and undefined are "empty"
+	    if (obj == null) return true;
+
+	    // Assume if it has a length property with a non-zero value
+	    // that that property is correct.
+	    if (obj.length > 0)    return false;
+	    if (obj.length === 0)  return true;
+
+	    // Otherwise, does it have any properties of its own?
+	    // Note that this doesn't handle
+	    // toString and valueOf enumeration bugs in IE < 9
+	    for (var key in obj) {
+	        if (hasOwnProperty.call(obj, key)) return false;
+	    }
+
+	    return true;
+	}
+    Polymer({
+        	width:0,
+        	height:0,
+        	eightyWeight:0,
+        	svg:null,
+        	
+        	selectedChanged:function(par){
+//         		console.log('changed')
+        		//console.log(this.selected)
+				
+				
+        		this.fire('overnode',par)
+        		svg.selectAll('.link').style('opacity', function(o) {
+          	         if (o.source == this.selected || o.target == this.selected)return o.source == this.selected || o.target == this.selected ? 1 : 0.3;
+          	     }.bind(this)).style("stroke-width", function(o) {
+          	         if (o.source == this.selected || o.target == this.selected) 
+          	       return o.source == this.selected || o.target == this.selected ? 3 : 1;
+          	   }.bind(this));
+          	     
+//           	   console.log(this.ss)
+
+          	   svg.selectAll('.node')
+          	     .style('opacity', function(ld) {
+
+          	         if (ld.fullName == this.selected.fullName) return 1;
+          	         if (_.some(ssGlobal.links,function(el){
+          	        	 return (el.source===this.selected && el.target===ld)||(el.source===ld && el.target===this.selected);
+          	         }.bind(this))) {
+          	         return 1;
+          	         }	
+          	         else if (typeof ld !== 'undefined') return .4;
+          	     }.bind(this));
+//           	 console.log(this.selected)
+          	 
+          	 
+          	     svg.selectAll('.nodelabel')
+          	     .style('opacity', function(ld) {
+//          			console.log(d)
+//      			console.log(ld)
+// 					console.log(this.selected)
+      	         if (typeof ld !== 'undefined' && ld.fullName == this.selected.fullName) return 1;
+//       	       if (typeof ld !== 'undefined')console.log(ld.fullName);
+//      				console.log(d)
+      	         if (_.some(ssGlobal.links,function(el){
+//      	         	 console.log(el.target);
+      	        	 return (el.source===this.selected && el.target===ld)||(el.source===ld && el.target===this.selected);
+      	         }.bind(this))) {
+      	         return 1;
+      	         }	
+      	         else if (typeof ld !== 'undefined') return .4;
+      	     }.bind(this))
+      	     .style('font-weight', function(ld) { 
+      	    	 if (typeof ld !== 'undefined' && ld.name == this.selected.name) return 500;
+      			//		console.log(ld)
+      			//		console.log(d)
+      			if (_.some(ssGlobal.links,function(el){
+      			//	 console.log(el.target);
+      				 return (el.source===this.selected && el.target===ld)||(el.source===ld && el.target===this.selected);
+      			}.bind(this))) {
+      			return 500;
+      			}	
+      			else return 300;}.bind(this));
+
+        	},
+        	ssChanged: function(attrName, oldVal, newVal) {
+        		if (!isEmpty(this.ss)){
+        			// inizializzazione
+        			qo=new QuerOrchestrator();
+        			this.queryStarted=false;
+        			
+        			var margin = {top: -5, right: -5, bottom: -5, left: -5};
+        			
+        			this.width=this.getBoundingClientRect().width*0.99;
+        			this.height=this.getBoundingClientRect().height*0.99;
+        			this.eightyWeight=this.width*0.8
+	        		console.log(this.width)
+	        		var div = this.$.graph
+	        		while (div.hasChildNodes() && div.lastChild.id != "title") {
+	        			div.removeChild(div.lastChild);
+	        		}
+        			ssGlobal=this.ss
+        			//console.log(svg)
+        			
+        			svg = d3.select(this.$.graph).append("svg")
+            		.attr("width", this.width )
+            		.attr("height", this.height )
+            		.append("g")
+//             		.attr("transform", "translate(" + margin.left + "," + margin.right + ")")
+        			
+        			
+        			
+// 	        		svg = d3.select()
+// 	    			.append("svg:svg")
+// 	    			    .attr("width", this.width)
+// 	    			    .attr("height", this.height)
+// 	    			    .attr("pointer-events", "all")
+// 	    		    .append('svg:g')
+// 	    		    .attr("id","ggraph")
+// 	    		    .attr("x",0)
+// 	    		    .attr("y",0)
+// 	    		    .attr("width", this.width)
+// 	    			    .attr("height", this.height)
+	    				//.call(d3.behavior.zoom().on("zoom", redraw)) //bug quando viene chiamat la funzione tick, si scatena anche redraw
+
+	    			
+// 	    			svg.append('svg:rect')
+// 	    		    .attr('width', this.width)
+// 	    		    .attr('height', this.height)
+// 	    		    .attr('fill', 'none');
+
+	        		this.drawGraph();
+        		}
+        	},
+        drawGraph:function(graph){
+        	//console.log(this.ss);
+    		var vocab=this.ss.vocab;
+    		
+    		colorGlobal=d3.scale.category20();
+    		
+    		
+    		var rect = svg.append("rect")
+            .attr("width", this.width)
+            .attr("height", this.height)
+            .style("fill", "none")
+            .style("pointer-events", "all");
+
+        	var container = svg.append("g");
+    		
+    		
+    		for (a in vocab){
+    			colorGlobal(vocab[a]);
+    		}
+    		// console.log(vocab[0]);
+    		var max_ni = this.ss.nodes[0].ni;
+    		var max_np = this.ss.links[0].np;
+    		
+    		var legend = svg.selectAll(".legend")
+    		.data(this.ss.vocab)
+    		.enter().append("g")
+    		.attr("class", "legend")
+    		.attr("y", "5px")
+    		.attr("transform", function(d, i) { return "translate(0," + ((i * 17)+5) + " )"; });
+
+    // draw legend colored rectangles
+    		legend.append("rect")
+    			.attr("x", this.width-15 )
+    			.attr("width", 15)
+    			.attr("height", 15)
+      			.style("fill", colorGlobal);
+
+    // draw legend text
+    		legend.append("text")
+    	  		.attr("x", this.width - 21)
+    			.attr("y", 9)
+    			.attr("dy", ".35em")
+    			.style("text-anchor", "end")
+    			.style("font-family","Lato, sans-serif")
+    			.style("font-size", "14px")
+    			.style("font-weight", 900)
+    			.text(function(d) { return d;});
+    		
+    		
+    		
+    		for(i = 1; i < this.ss.nodes.length; i++){
+    			if(this.ss.nodes[i].ni > max_ni)
+    				max_ni = this.ss.nodes[i].ni;
+    		}
+    		//console.log(min_ni);
+    		//console.log(max_ni);
+    		for(i = 1; i < this.ss.links.length; i++){
+    			if(this.ss.links[i].np > max_np)
+    				max_np = this.ss.links[i].np;
+    		}
+    		// console.log(max_np);
+    		// console.log((2500) * 31 / graph.nodes.length);
+    		// console.log(graph.nodes.length);
+    		//debugger;	
+    		var charge = (-4100) * 31 / this.ss.nodes.length;
+     
+    	    // var svg = d3.select("body").append("svg").attr({"width":width,"height":height});
+    	    
+    	    console.log(charge)
+            
+    		var force = d3.layout.force()
+    			.nodes(this.ss.nodes)
+    			.links(this.ss.links)
+    			.gravity(0.9).linkDistance([linkDistance])
+    			.charge(charge)
+    			.friction(0.7)
+    			.size([this.width, this.height])
+    			.start();
+
+// symmetricDiffLinkLengths(100)
+    		
+    	    console.log(parseInt(-(2/3)*this.ss.nodes.length+100))
+    	    
+    	    
+//     	    var force = cola.d3adaptor().linkDistance(parseInt(-(2/3)*this.ss.nodes.length+100))
+// 			.nodes(this.ss.nodes)
+// 			.links(this.ss.links)
+// 			.size([this.width, this.height])
+// 			.start();
+    	    
+    	   
+    		
+    	    var zoom = d3.behavior.zoom()
+            .scaleExtent([1, 10])
+            .on("zoom", zoomed);
+    	    
+    	    svg.call(zoom);
+    	    
+        var drag = d3.behavior.drag()
+            .origin(function(d) { return d; })
+            .on("dragstart", dragstarted)
+            .on("drag", dragged)
+            .on("dragend", dragended);
+    	      
+    		divTT = d3.select("#chart").append("div")   
+    			.attr("class", "tooltip")
+    			.style("position", "absolute")
+    			.style("top", 5)
+    			.style("left",5)
+    			// 	 .style("z-index",-1)
+    			.style("opacity", 1);
+    		
+//     		
+    		var edgeLegend	= d3.select("#chart").append("div")   
+    		    .attr("class", "edgeLegend")
+    		    .attr({
+    		    	'width': '20px',
+    		    	'height': '10px', 
+    		    	'position': 'absolute',
+    		    	'overflow-y': 'auto'
+    		    })
+    		    .style("position", "absolute")
+    		// 	 .style("z-index",-1)
+    		    .style("opacity", 1);
+    	 
+  
+    	    var links = container
+            .attr("class", "links")
+            .selectAll(".link")
+    		      .data(this.ss.links)
+    		      .enter().append("svg:line") //
+    		      .attr("class", "link")
+    		      .attr("id",function(d,i) {return 'edge'+i;})
+    		      .attr('marker-end','url(#arrowhead)')
+    		      .style("stroke-width", 1 )
+    		      .attr("x1", function(d) { return d.source.x; })
+    			  .attr("y1", function(d) { return d.source.y; })
+    		  	  .attr("x2", function(d) { return d.target.x; })
+    		  	  .attr("y2", function(d) { return d.target.y; })//;
+
+    	    autoedges=[]         
+    	    for(i=0;i<this.ss.links.length;i++){
+    	    	if(this.ss.links[i].source == this.ss.links[i].target){
+//    	    		console.log('autonode')
+    	    		autoedges.push(this.ss.links[i])
+    	    	} 
+    	    }
+    	    
+    	    var autoedges = container
+            .selectAll(".autoedges")
+    	    	.data(autoedges)
+    	    	.enter().append("svg:path") //
+    	      	.attr("class", "link")
+    	      	.attr("id",function(d,i) {return 'autoedge'+i;})
+    	      //.style("stroke-width", function(d) { return (d.np * 10 / max_np) + 1;; })
+    	      	.style("stroke-width", "1.5px")
+    	      	.attr("fill", "none")
+    	      // .attr('marker-end','url(#arrowhead)')
+    	      	.style("stroke",'black');
+    	      //.style("pointer-events", "none");
+    	      
+    	    var nodes = container
+            .attr("class", "nodes")
+            .selectAll(".node")
+    	      .data(this.ss.nodes)
+    	      .enter().append("svg:circle")
+    	      .attr("class", "node")
+    	      .attr("stroke", "black")
+    	      .attr("stroke-width", "0.5px")
+    	      .attr("r", function(d) { return (d.ni * 20 / max_ni)+5; }) //dimensione nodi
+	   	      .style("fill", function(d) { return colorGlobal(d.vocab); })
+//     	      .on("dblclick", dblclick)
+//     	      .on("click",nodeClick)
+    	      .call(drag)
+    	      
+    	    
+    	        
+    	    var nodelabels = container
+            .attr("class", "nodelabel")
+            .selectAll(".nodelabel")
+    	       .data(this.ss.nodes)
+    	       .enter()
+    	       .append("text")
+    	       .attr({"x":function(d){return d.x+ (d.ni * 25 / max_ni) + 5  + stroke_width; },
+    	              "y":function(d){return d.y;},
+    	              "class":"nodelabel",
+    	              "id":function(d){return "nodelabel"+d.index}})
+    			.style("font-family","Lato, sans-serif")
+    			.style("font-weight", 300)
+    			.style("stroke","black")
+    			.attr("font-size", "13px")
+    			.attr("fill", "black")
+//     			.append("tspan")
+//     			.attr('id',function(d){return "nodelabeltspan"+d.index})
+    	       .text(function(d){return d.name;})
+//     	       .insertBefore(svg.select(function(d){return "#nodelabeltspan"+d.index}),document.createElement("tspan"))
+//     	       .text(function(d){return d.name;});
+    	       
+    	    
+    	    
+    	    
+    	    nodes.append("title")
+    			.text(function(d) { return d.fullName; });
+    		links.append("title")
+    			.text(function(d) { return d.name; });
+    			
+    		svg.style("opacity", 1e-6)
+    			.transition()
+    			.duration(1000)
+    			.style("opacity", 1);
+    			
+    		
+    	       
+    	    var edgepaths = svg.selectAll(".edgepath")
+    	        .data(this.ss.links)
+    	        .enter()
+    	        .append('path')
+    	        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
+    	               'class':'edgepath',
+    	               'fill-opacity':0,
+    	               'stroke-opacity':0,
+    	               'fill':'blue',
+    	               'stroke':'red',
+    	               'id':function(d,i) {return 'edgepath'+i}})
+    	        .style("pointer-events", "none");
+    	
+
+    	
+    	
+    	    force.on("tick", function(){
+    	        
+    	
+    	        nodes.attr({"cx":function(d){return d.x = Math.max(10, Math.min(this.width - 10, d.x));}.bind(this),
+    	                    "cy":function(d){return d.y = Math.max(10, Math.min(this.height - 10, d.y)) ;}.bind(this)
+    	        });
+    	        
+    	        links.attr({"x1": function(d){return d.source.x;},
+                    "y1": function(d){return d.source.y;},
+                    "x2": function(d){return d.target.x;},
+                    "y2": function(d){return d.target.y;}
+        	});
+    	
+    	        nodelabels.attr("x", function(d){return d.x+ (d.ni * 25 / max_ni) + 5  + stroke_width;}) 
+    	                  .attr("y", function(d) { return d.y; });
+    			
+    	        
+//     	        edgepaths.attr("x1", function(d) { return d.source.x; })
+//     	        .attr("y1", function(d) { return d.source.y; })
+//     	        .attr("x2", function(d) { return d.target.x; })
+//     	        .attr("y2", function(d) { return d.target.y; });
+    	        
+    	        edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+    	                                           //console.log(d)
+    	                                           return path});  
+    	                                           
+    	    	        
+    	         autoedges.attr("d", function(d) {
+    	         	var dx = d.target.x - d.source.x,
+    	            	dy = d.target.y - d.source.y,
+    	            	dr = Math.sqrt(dx * dx + dy * dy),
+    	            	x1 = d.source.x,
+    					y1 = d.source.y,
+    					x2 = d.target.x,
+    					y2 = d.target.y;
+    	         
+    				var xRotation = 0, // degrees
+    					largeArc = 0, // 1 or 0
+    					sweep = 1; // 1 or 0
+    					xRotation = -45;
+
+           				 // Needs to be 1.
+    		            largeArc = 1;
+    		
+    		            // Change sweep to change orientation of loop. 
+    		            //sweep = 0;
+    		
+    		            // Make drx and dry different to get an ellipse
+    		            // instead of a circle.
+    		            drx = 30;
+    		            dry = 20;
+    		            
+    		            // For whatever reason the arc collapses to a point if the beginning
+    		            // and ending points of the arc are the same, so kludge it.
+    		            x2 = x2 + 1;
+    		            y2 = y2 + 1;
+    					return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
+    		        
+    		    });
+    	        
+    	    }.bind(this));
+    	    
+    	    function zoomed() {
+    	          container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    	        }
+
+    	        function dragstarted(d) {
+    	          d3.event.sourceEvent.stopPropagation();
+    	          
+    	          d3.select(this).classed("dragging", true);
+//     	          console.log(force)
+    	          force.start();
+    	        }
+
+    	        function dragged(d) {
+    	          
+    	          d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+    	          
+    	        }
+
+    	        function dragended(d) {
+    	          
+    	          d3.select(this).classed("dragging", false);
+    	        }
+    	    
+    	    svg.selectAll('.node').on("mouseover", function(d){this.selected=d}.bind(this));
+    	    
+        },
+        nodeMouseOver:function(d,par){
+// 			console.log(par)
+	    	this.selected=d;
+	    	
+    	    
+	    
+        }
+
+    
+        
+        })
+
+
+        
+        
+	
+    
+        </script>
+</polymer-element>
+    
