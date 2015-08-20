@@ -88,11 +88,11 @@ class DataHandler(tornado.web.RequestHandler):
             
             
                 
-        pprint.pprint({'nodes':node,'links':edges})
+        #pprint.pprint({'nodes':node,'links':edges})
 
-        pprint.pprint(vocab)
+        #pprint.pprint(vocab)
 
-        self.write({'nodes':node,'links':edges,'vocab':list(vocab),'title':response['name'],'id':response['_id']})
+        self.write({'nodes':node,'links':edges,'vocab':list(vocab),'title':response['name'] if 'name' in response else response['uri'],'id':response['_id']})
         self.finish()
 
 class IntensionalDataHandler(tornado.web.RequestHandler):
@@ -137,7 +137,7 @@ class IntensionalDataHandler(tornado.web.RequestHandler):
         index = 0
         vocab=set()
         nodes=set()
-        pprint.pprint(ik)
+        #pprint.pprint(ik)
         for a in ik:
             nodes.add(a['s'])
             nodes.add(a['o'])
@@ -168,11 +168,11 @@ class IntensionalDataHandler(tornado.web.RequestHandler):
                           'vocab':extractVocab(prop['p'])}]})
                 
                
-        pprint.pprint({'nodes':node,'links':edges})
+        #pprint.pprint({'nodes':node,'links':edges})
 
-        pprint.pprint(vocab)
+        #pprint.pprint(vocab)
         
-        self.write({'nodes':node,'links':edges,'vocab':list(vocab),'title':response['nome'],'id':response['_id']})
+        self.write({'nodes':node,'links':edges,'vocab':list(vocab),'title':response['name'] if 'name' in response else response['uri'],'id':response['_id']})
         self.finish()
 
 

@@ -22,7 +22,13 @@
         {% block student %}
         {% if len(end['ss']['nodes']) > 2%}
 	         <tr>
-				<td><a href="/lodex/{{end['_id']}}">{{ end['name'] }}</a></td>
+				<td><a href="/lodex/{{end['_id']}}">
+				{% if 'name' in end %}
+					{{ end['name'] }}
+				{% else %}
+					{{ end['uri'] }}
+				{% end %}
+				</a></td>
 				<td>{{ len(end['ss']['nodes']) }}</td>
 				{% if 'triples' in end %}
 					<td>{{ end['triples'] }}</td>
