@@ -45,12 +45,7 @@ class DataHandler(tornado.web.RequestHandler):
         db.lodex.ike.find_one({'_id':int(endpoint_id)},callback=self._on_response)
         
     def _on_response(self,response,error):
-         
-#         json_data=open('static/flare.json')
-#         data = json.load(json_data)
-#         nodes = []
-#         for 
-#         response =yield db.Test.find_one({'_id':105})
+
         node = []
         invNode={}
         index = 0
@@ -64,13 +59,7 @@ class DataHandler(tornado.web.RequestHandler):
                 attributes[att['c']]= [{'n':int(att['n']),'p':att['p']}]
             else:
                 attributes[att['c']].append({'n':int(att['n']),'p':att['p']})
-        
-#         pprint.pprint(attributes)
-        
-#         for a in attributes:
-#             pprint.pprint(attributes[a])
-#             newlist = sorted(attributes[a], key=itemgetter('n'),reverse=True) 
-#             pprint.pprint(newlist)
+
             
         for clas in ss['nodes']:
             vocab.add(extractVocab(clas['c']))
@@ -121,13 +110,9 @@ class DataHandler(tornado.web.RequestHandler):
         for i in range(len(edges)):
             edges[i]['label']=sorted(edges[i]['label'], key=itemgetter('np')) 
             
-                
-#         pprint.pprint({'nodes':node,'links':edges})
-#         pprint.pprint({'nodes':node})
-# 
-#         pprint.pprint(vocab)
+
         print 'lodex2c'
-        self.write({'nodes':node,'links':edges,'vocab':list(vocab),'title':response['name'],'id':response['_id'],'uri':response['uri']})
+        self.write({'nodes':node,'links':edges,'vocab':list(vocab),'title':response['name'] if 'name' in response else response['uri'],'id':response['_id'],'uri':response['uri']})
         self.finish()
 
 class IntensionalDataHandler(tornado.web.RequestHandler):
