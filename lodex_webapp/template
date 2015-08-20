@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+*{font-family:Lato;}
+</style>
+<html>
+  <head>
+    <title>LODeX</title>
+  </head>
+  <body>
+  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>  
+	<table border="0">
+		<tr>
+			<td>name</td>
+			<td>nodes</td>
+			<td>triples</td>
+			<td>instances</td>
+			<td>class n.</td>
+			<td>prop n.</td>
+		</tr>
+	{% for end in endpoints %}
+        {% block student %}
+        {% if len(end['ss']['nodes']) > 2%}
+	         <tr>
+				<td><a href="/lodex/{{end['_id']}}">{{ end['name'] }}</a></td>
+				<td>{{ len(end['ss']['nodes']) }}</td>
+				{% if 'triples' in end %}
+					<td>{{ end['triples'] }}</td>
+				{% else %}
+					<td/>
+				{% end %}
+				{% if 'instances' in end %}
+					<td>{{ end['instances'] }}</td>
+				{% else %}
+					<td/>
+				{% end %}
+				{% if 'classNumber' in end %}
+					<td>{{ end['classNumber'] }}</td>
+				{% else %}
+					<td/>
+				{% end %}
+				{% if 'propList' in end %}
+					<td>{{ len(end['propList']) }}</td>
+				{% else %}
+					<td/>
+				{% end %}
+			</tr>
+			{% end %}
+	        {% end %}
+      {% end %}
+		
+	</table>
+  </body>
+</html>

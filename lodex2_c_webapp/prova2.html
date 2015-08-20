@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body{
+    overflow:hidden;
+}
+
+div#chart {
+    height: 100vh;
+    width:100vw;
+    
+}
+ 
+div#query {
+    height: 100vh;
+    width:100vw;
+}
+
+div#results {
+    height: 100vh;
+    width:100vw;
+}
+
+.CodeMirror {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black;
+	}
+
+
+
+
+.link {
+  stroke: black;
+  stroke-opacity: .6;
+}
+
+.icon:before {
+  display: inline-block;
+  font-family: 'Typicons';
+  text-decoration: none;
+  speak: none;
+}
+
+.
+
+@font-face {
+  font-family: 'fontello';
+  src: url('../static/fontello/font/fontello.eot?72578637');
+  src: url('../static/fontello/font/fontello.eot?72578637#iefix') format('embedded-opentype'),
+       url('../static/fontello/font/fontello.woff?72578637') format('woff'),
+       url('../static/fontello/font/fontello.ttf?72578637') format('truetype'),
+       url('../static/fontello/font/fontello.svg?72578637#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+.title {
+	font-size: 30px;
+}
+.instances {
+	font-size: 20px;
+	font-weight:900;
+}
+.clusters {
+	font-size: 11px;
+	font-weight:700;
+	padding: 2px;
+	border: 1px solid;
+	border-radius: 4px;
+	margin:2px;
+	
+}
+.propTit {
+	font-size: 18px;
+	font-weight:900;
+}
+.attrTitle {
+	font-size: 18px;
+	font-weight:900;
+}
+
+.titleEn {
+	float:right;
+	text-align:right;
+	width:63%;
+	font-family:Lato, sans-serif;
+	font-size:35px;
+	font-weight:700; 
+}
+
+.titleQ {
+	width:100%;
+	font-family:Lato, sans-serif;
+	font-size:35px;
+	font-weight:700; 
+}
+
+a, u {
+    text-decoration: none;
+    color: inherit;
+}
+
+#attributes {
+        height:38vh;
+        width: 16vw;
+        overflow: hidden;
+        position:relative;
+        
+      }
+      
+#properties {
+        height:40vh;
+        width: 30vw;
+        overflow: hidden;
+        position:relative;
+        
+      }
+      
+#vocabularies {
+        height:600px;
+        width: 400px;
+        overflow: hidden;
+        position:relative;
+        
+      }
+div#container2{
+	height:45vh;
+	width: 20vw;
+}  
+
+div#graph2{
+	position:absolute;
+	height:43vh;
+	width: 20vw;
+	border: 2px solid;
+    border-radius: 25px;
+    
+}
+
+div#textGraph2{
+	position:relative;
+	left:15px;
+	width: 15vw;
+	height:40px;
+	font-family:Lato, sans-serif;
+	font-size:20px;
+	font-weight:700;
+}   
+
+div#container{
+	float:right;
+}  
+
+      
+body {
+	margin: 1px;
+}
+
+.buttonLod{
+	background: transparent;
+    font-family:Lato, sans-serif;
+	font-size:15px;
+	font-weight:700;
+	padding: 2px;
+	border: 1px solid;
+	border-radius: 4px;
+}
+
+.buttonLodblack{
+	background: #000000;
+    font-family:Lato, sans-serif;
+	font-size:15px;
+	font-weight:700;
+	padding: 4px;
+	border: 2px solid;
+	border-radius: 4px;
+	color: white;
+}
+
+
+#chartLink{
+	float:right;
+	position:relative;
+	margin:4px;
+    
+}
+
+.linkButton{
+	background: transparent;
+    font-family:Lato, sans-serif;
+	font-size:15px;
+	font-weight:700;
+	padding: 2px;
+	border: 1px solid;
+	border-radius: 4px;
+}
+
+#resultLink{
+	float:right;
+	position:relative;
+	margin:4px;
+  
+}
+
+#clearQ,#goToQ {
+
+    background: transparent;
+    font-family:Lato, sans-serif;
+	font-size:15px;
+	font-weight:700;
+	padding: 2px;
+	border: 1px solid;
+	border-radius: 4px;
+    float:right;
+}
+
+#addAttButton,#addLikNodeButton {
+
+    background: transparent;
+    font-family:Lato, sans-serif;
+	font-size:10px;
+	font-weight:700;
+	padding: 2px;
+    border: 1px solid;
+	border-radius: 2px;
+}
+
+#resultViz{
+	width:99vw; 
+	height:80vh;
+}
+
+span.align-right { 
+	float:right;
+	padding:10px; }
+
+.SPRQLcus{
+font-family:Lato, sans-serif;
+	font-size:14px;
+	font-weight:700;
+	padding: 2px;
+    
+}
+
+input, select, textarea {
+font-family:Lato, sans-serif;
+	font-size:12px;
+	font-weight:700;
+	padding: 2px;
+    border: 1px solid;
+	border-radius: 2px;
+}
+
+.wrapperDiv {
+    display:table;
+    width:100vw;
+}
+.rowDiv {
+    display:table-row;
+}
+
+#firstFirst {
+    display:table-cell;
+    width:40vw;
+}
+#secondFirst {
+    display:table-cell;
+    width:30vw;
+}
+#thirdFirst {
+    display:table-cell;
+    width:30vw;
+}
+
+.spacerDiv {
+	display:table-cell;
+	width:5px;
+}
+
+#firstSecond {
+    display:table-cell;
+    width:35vw;
+    border: 2px solid;
+    border-radius: 5px;
+    padding:3px;
+    margin:3px;
+}
+#secondSecond {
+    display:table-cell;
+    width:35vw;
+    border: 2px solid;
+    border-radius: 5px;
+    padding:3px;
+    margin:3px;
+}
+
+
+#spacerhig {
+    width:100vw;
+    heigth:5px;
+}​
+
+</style>
+<html>
+<body>
+
+	
+	<script src="../lodex2c/static/d3.v3.min.js"></script>
+	<script src="../lodex2c/static/jquery.min.js"></script>
+	
+	<div id="chart">
+	<div id="container">
+	<div id="graph"></div>
+	</div>
+	<div id="container2">
+	<div id="graph2"><div id="textGraph2">Query<input id='clearQ' type='button' onclick='clearQuery()' value='Clear'><input class='buttonLod' id='goToQ' type='button' onclick='goToQuery()' value='Generate'></div></div>
+	</div>
+	
+	</div>
+	
+
+	
+	
+	<div id="query">
+	
+<div class="wrapperDiv">
+  <div class="rowDiv">
+    <div id="firstFirst"><div class="titleQ">SPARQL Query <br></div></div>
+    <div id="secondFirst"></div>
+    <div id="thirdFirst"><a class="linkButton" id="resultLink" href="#results">Results</a>
+    <a class="linkButton" id='chartLink' href="#chart">Schema Summary</a></div>
+  </div>
+</div>
+<p>
+</p>
+
+<div class="wrapperDiv">
+  <div class="rowDiv">
+  <div class="spacerDiv"></div>
+    <div id="firstSecond">
+
+<form id="filter">
+	<span class="SPRQLcus" >Filter Condition</span>
+ <select id="parListAttForm" name="parListAttForm">
+ </select>
+ <select id="filtOp" name="filtOp">
+  <option value="regex">regex</option>
+  <option value=">">></option>
+  <option value="<">&lt;</option>
+  <option value="=">=</option>
+ </select>
+ <input name="expression" value=" " />
+ <button type="button" class="buttonLod" id='AddFilter' onclick="AddFilt()">Add Filter</button>
+</form>
+ <button type="button" class="buttonLod" id='deleteAllFilter' onclick="DeleteAllFilter()">Delete All Filters</button>
+</div>
+<div class="spacerDiv"></div>
+  <div id="secondSecond">
+<form id="attrForm">
+	<span class="SPRQLcus" >Attributes</span>
+ <select id="parListAttForm2" name="parListAttForm">
+ </select>
+  <button type="button" class="buttonLod" id='ChangeO' onclick="ChangeOM()">Change O/M</button>
+  <button type="button" class="buttonLod" id='DeleteA' onclick="DeleteAtt()">Remove</button>
+ </form>
+ <form id="classForm">
+ <span class="SPRQLcus" >Classes&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+ <select id="parListClassForm" name="parListClassForm">
+ </select>
+  <button type="button" class="buttonLod" id='ChangeOC' onclick="ChangeOMC()">Change O/M</button>
+  <button type="button" class="buttonLod" id='DeleteAC' onclick="DeleteClass()">Remove</button>
+ </form>
+ 
+</div>
+
+<div class="spacerDiv"></div>
+    <!-- <div id="thirdSecond">
+    </div> -->
+  </div>
+</div>
+<div class="spacerhig"><p></div>
+<div class="wrapperDiv">
+  <div class="rowDiv">
+  <div class="spacerDiv"></div>
+    <div id="firstSecond">
+    
+    
+    <form id="paging">
+<span class="SPRQLcus" >Pagination</span>
+
+ <input id="pagingSize" name="pagingSize" value=" " />
+ <button type="button" class="buttonLod" id='changeP' onclick="ChangeP()">Change</button>
+<button type="button" class="buttonLod" id='disableP' onclick="DisableP()">Disable</button>
+</form>
+    
+    
+    <br><span id="countRes" class="SPRQLcus" ></span>
+    </div>
+    
+    
+    <div class="spacerDiv"></div>
+  <div id="secondSecond">
+  
+  <form id="ordering">
+<span class="SPRQLcus" >Ordering</span>
+
+ <select id="orderingSel" name="orderingSel">
+ </select>
+  <select id="ordVerso" name="ordVerso">
+  <option value="ASC">asc</option>
+  <option value="DESC">desc</option>
+ </select>
+ <button type="button" class="buttonLod" id='addOrder' onclick="AddOrder()">Add Order</button>
+</form>
+
+
+<form id="orderingRem">
+
+ <select id="orderingDel" name="orderingDel">
+ </select>
+ <button type="button" class="buttonLod" id='removeSelO' onclick="RemoveSelO()">Remove</button>
+ <button type="button" class="buttonLod" id='removeOAll' onclick="RemoveOAll()">Remove All</button>
+</form>
+
+  
+  
+  </div>
+    
+    <div class="spacerDiv"></div>
+    </div>
+    </div>
+    
+    
+<!--   <p>  
+    
+<div class="wrapperDiv">
+<div class="rowDiv">   
+  <div class="spacerDiv"></div>
+  <div class="rowNoBor">
+  <button type="button" class="buttonLod" id='disComp' onclick="DisComp()">Disable Compilator</button>
+  </div>
+  </div>
+  </div>   -->  
+    
+
+
+<!-- 	<p> -->
+ 
+ 
+<!-- <select id="sgvzlr_optChart" name="chart"> -->
+<!-- <optgroup label="google.visualization.*"> -->
+<!-- <option value="google.visualization.AnnotatedTimeLine">AnnotatedTimeLine</option> -->
+<!-- <option value="google.visualization.AreaChart">AreaChart</option> -->
+<!-- <option value="google.visualization.BarChart">BarChart</option> -->
+<!-- <option value="google.visualization.BubbleChart">BubbleChart</option> -->
+<!-- <option value="google.visualization.CandlestickChart">CandlestickChart</option> -->
+<!-- <option value="google.visualization.ColumnChart">ColumnChart</option> -->
+<!-- <option value="google.visualization.Gauge">Gauge</option> -->
+<!-- <option value="google.visualization.GeoChart">GeoChart</option> -->
+<!-- <option value="google.visualization.GeoMap">GeoMap</option> -->
+<!-- <option value="google.visualization.ImageSparkLine">ImageSparkLine</option> -->
+<!-- <option value="google.visualization.LineChart">LineChart</option> -->
+<!-- <option value="google.visualization.Map">Map</option> -->
+<!-- <option value="google.visualization.MotionChart">MotionChart</option> -->
+<!-- <option value="google.visualization.OrgChart">OrgChart</option> -->
+<!-- <option value="google.visualization.PieChart">PieChart</option> -->
+<!-- <option value="google.visualization.ScatterChart">ScatterChart</option> -->
+<!-- <option value="google.visualization.SteppedAreaChart">SteppedAreaChart</option> -->
+<!-- <option selected="selected" value="google.visualization.Table">Table</option> -->
+<!-- <option value="google.visualization.TreeMap">TreeMap</option> -->
+<!-- </optgroup><optgroup label="sgvizler.visualization.*"> -->
+<!-- <option value="sgvizler.visualization.D3ForceGraph">D3ForceGraph</option> -->
+<!-- <option value="sgvizler.visualization.DefList">DefList</option> -->
+<!-- <option value="sgvizler.visualization.DraculaGraph">DraculaGraph</option> -->
+<!-- <option value="sgvizler.visualization.List">List</option> -->
+<!-- <option value="sgvizler.visualization.Map">Map</option> -->
+<!-- <option value="sgvizler.visualization.MapWKT">MapWKT</option> -->
+<!-- <option value="sgvizler.visualization.Table">Table</option> -->
+<!-- <option value="sgvizler.visualization.Text">Text</option> -->
+<!-- </optgroup> -->
+<!-- </select> -->
+
+
+
+<!-- 	</p> -->
+
+<br>
+	
+	<form><textarea id="code" name="code">
+PREFIX a: &lt;http://www.w3.org/2000/10/annotation-ns#>
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/>
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/>
+
+# Comment!
+
+SELECT ?Concept 
+where 
+	{[] a ?Concept} 
+LIMIT 100
+</textarea></form>
+
+<input class="buttonLod" id="lunchQuery" type='button' onclick='goToResults()' value='Query'><a id='goToRes' href='#results' ></a>
+<p>
+
+
+</div>
+	
+	
+	
+	<div id="results">
+	<p>
+	
+	<span class="titleQ">
+	Results
+	</span>
+	<span class="align-right">
+            <a class="linkButton" href="#chart">Schema Summary</a>
+			<a class="linkButton" href="#query">Query</a>
+    </span>
+	</p>
+	
+	<p>
+	<span id="pagin" class="align-right">
+            <button class="buttonLod" id='pervPage' value="Prev Page" onclick="prevPage()">Prev Page</button>
+            <button class="buttonLod" id='nextPage' value="Next Page" onclick="nextPage()">Next Page</button>
+    </span>
+	</p>
+	
+	<div id="resultViz" 
+	
+   data-sgvizler-chart="sgvizler.visualization.Table"
+   style="border:1px solid black; display: inline-block;">
+	
+	</div>
+	
+	
+	
+	</div>
+	
+<!-- 	<div id="query">SECOND PAGE</div> -->
+	
+	<link href="../lodex2c/static/perfect-scrollbar.css" rel="stylesheet">
+	
+     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+<!--      <link href='../static/fontello/css/fontello.css' rel='stylesheet' type='text/css'> -->
+<!--      <link href='../static/fontello/css/animation.css' rel='stylesheet' type='text/css'> -->
+     <link href='../lodex2c/static/fontello/css/fontello.css' rel='stylesheet' type='text/css'>
+     <link href='../lodex2c/static/fontello/css/animation.css' rel='stylesheet' type='text/css'>
+	 <script src="../lodex2c/static/jquery.mousewheel.js"></script>
+    <script src="../lodex2c/static/underscore-min.js"></script>
+    <script src="../lodex2c/static/perfect-scrollbar.js"></script>
+    
+
+    <script src="../lodex2c/static/codemirror.js"></script>
+	<link rel="stylesheet" href="../lodex2c/static/codemirror.css">
+	<script src="../lodex2c/static/sparql.js"></script>
+	<script src="../lodex2c/static/matchbrackets.js"></script>
+	<script src="../lodex2c/static/drawGraph.js"></script>
+	<script src="../lodex2c/static/stapes.min.js"></script>
+	<script src="../lodex2c/static/drawGraph2.js"></script>
+	<script src="../lodex2c/static/interaction.js"></script>
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="../lodex2c/static/sgvizler.min.js"></script>
+<!-- <script type="text/javascript" src="http://beta.data2000.no/sgvizler/release/0.6/sgvizler.js"></script> -->
+
+    
+<script>
+
+	var margin = {top: 20, right: 20, bottom: 30, left: 40};
+	var trueW = document.documentElement.clientWidth;
+	var width = document.documentElement.clientWidth * 0.7  //- margin.right;
+	var height = document.documentElement.clientHeight  //- margin.bottom;
+	var fill = d3.scale.category20();
+	var stroke_width = 1.5;
+	var offset_x = 10;
+	var offset_y = 12;
+	var color = d3.scale.category20();	
+	var tick = false;
+	var linkDistance=200;
+	var queryDiv;
+	var resultsDiv;
+	var editor;
+	var endpointUri;
+	var ike;
+	var qo; //queryOrchestrator
+	var curQCN =new Array(); //current query Class Node
+	var divTT;
+	var edgeLegend;
+	var svg;
+	var propEdge = new Array()
+	
+	
+	// load Schema Summary
+	
+	d3.json("/lodex2c/getData/{{endpoint_id}}", function(error, graph) {
+		svg = d3.select("#graph")
+			.append("svg:svg")
+			    .attr("width", width)
+			    .attr("height", height)
+			    .attr("pointer-events", "all")
+		    .append('svg:g')
+				//.call(d3.behavior.zoom().on("zoom", redraw)) //bug quando viene chiamat la funzione tick, si scatena anche redraw
+			.append('svg:g');
+			
+			svg.append('svg:rect')
+		    .attr('width', width)
+		    .attr('height', height)
+		    .attr('fill', 'none');
+    	
+    	
+    	endpointUri=graph.uri;
+    	
+    	sgvizler
+        .defaultEndpointOutputFormat('jsonp')
+        .defaultEndpointURL(endpointUri).containerDrawAll();
+    	console.log(endpointUri);
+    	
+    	ike=graph;
+    	
+    	
+    	drawGraph(graph, svg);
+    });
+	
+	
+	editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: "application/x-sparql-query",
+        matchBrackets: true
+      });
+	 
+
+	
+	jQuery(document).ready(function ($) {
+		
+
+		
+		$("#container2").css({'position':'relative',
+								'left': parseInt(width*0.225)+'px',
+								'top':parseInt(height*0.55)+'px'
+								});
+		
+		disableQueryButtons();
+		
+		 
+		
+	      
+	});
+
+	
+</script>
+<script src="../lodex2c/static/myModel.js"></script>
+</body>
+
+</html>

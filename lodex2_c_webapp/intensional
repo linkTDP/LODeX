@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+  <head>
+    <title>LODsum</title>
+  </head>
+  <body>
+
+
+		{% if 'ss' in obj %}
+		<p>{{ obj['ss'] }}</p>
+		{% else %}
+		<p>{{ obj['s'] }} NOT FOUND</p>
+		{% end %}
+		{% if 'pp' in obj %}
+		<p>{{ obj['pp'] }}</p>
+		{% else %}
+		<p>{{ obj['p'] }} NOT FOUND</p>
+		{% end %}
+		{% if 'oo' in obj %}
+		<p>{{ obj['oo'] }}</p>
+		{% else %}
+		<p>{{ obj['o'] }} NOT FOUND</p>
+		{% end %}
+	</body>
+</html>
