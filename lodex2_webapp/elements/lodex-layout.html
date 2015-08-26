@@ -623,21 +623,40 @@ background-color: #F5F5F5;
 		testSoundnessEndpoint:function(){
 			var query = "SELECT ?s ?p ?o {?s ?p ?o} LIMIT 1"
 			var queryUrl = encodeURI( this.ss.uri+"?query="+query+"&format=json" );
-			$.ajax({
-		        dataType: "jsonp",  
-		        url: queryUrl,
-		        timeout:2000,
-		        success: function( _data ) {
-		        	console.log('succes')
-		            var results = _data.results.bindings;
-		            if (results.length > 0){
-		            	this.reachable=true
-		            }
-		        }.bind(this),
-				error: function(jqXHR,error, errorThrown) {  
-					this.reachable=false;
-	            }.bind(this)
-		    });
+			if (this.ss.uri.toLowerCase().indexOf('poolparty') > -1){
+				queryUrl=queryUrl+'&content-type=application%2Fjson';
+				$.ajax({ 
+			        url: queryUrl,
+			        timeout:2000,	
+			        success: function( _data ) {
+			        	console.log('succes')
+			            var results = _data.results.bindings;
+			            if (results.length > 0){
+			            	this.reachable=true
+			            }
+			        }.bind(this),
+					error: function(jqXHR,error, errorThrown) {  
+						this.reachable=false;
+		            }.bind(this)
+			    });
+			}else{
+				$.ajax({
+			        dataType: "jsonp",  
+			        url: queryUrl,
+			        timeout:2000,	
+			        success: function( _data ) {
+			        	console.log('succes')
+			            var results = _data.results.bindings;
+			            if (results.length > 0){
+			            	this.reachable=true
+			            }
+			        }.bind(this),
+					error: function(jqXHR,error, errorThrown) {  
+						this.reachable=false;
+		            }.bind(this)
+			    });
+			}
+			
 		},
 		reachableChanged:function(){
 			console.log(this.reachable)

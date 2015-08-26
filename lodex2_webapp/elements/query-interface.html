@@ -463,10 +463,6 @@ LIMIT 100
  <paper-toast id="toast1" text="Filter conditions not complete"></paper-toast>   
     </template>
     <script>
-//     var editor=CodeMirror.fromTextArea(document.que, {
-//         mode: "application/x-sparql-query",
-//         matchBrackets: true
-//       });
 	var globalData;
 	var globalColumn;
     Polymer({
@@ -669,22 +665,6 @@ LIMIT 100
     		this.filter=false;
 		},
 		addFilter:function(){
-// 			console.log(this.filtAttSel)
-// 			console.log(this.conditionF)
-// 			console.log(this.commandF)
-
-
-
-// 			<core-item>contain</core-item>
-// 			<core-item>not contain</core-item> FILTER (!regex(?titulo_pelicula, "The Lord of the Rings","i")) 
-// 			<core-item>equal</core-item>    FILTER (str(?name) = "May Robson")
-// 			<core-item>not equal</core-item>  !=
-// 			<core-item>></core-item>
-// 			<core-item>&lt;</core-item>
-
-
-
-			
 			
 			if (this.filtAttSel!=null && this.commandF!=null && this.conditionF){
 				qo.addFiltCondToPar(this.attrPar[this.filtAttSel],this.commandF,this.conditionF.trim())
@@ -744,78 +724,32 @@ LIMIT 100
     	     while (div.hasChildNodes() && div.lastChild.id != "title") {
      			div.removeChild(div.lastChild);
      		}
-//     	     this.$.resSpinner.active=true
-    	     
-//     		console.log(this.editor)
 			var sparqlQueryString = this.editor.getDoc().getValue(),
 		    containerID = "resultViz",
 		    Q = new sgvizler.Query()
-
-// console.log(this.$.resultViz.offsetHeight)
-// 	this.width=this.getBoundingClientRect().width*0.99;
-//     			this.height=this.getBoundingClientRect().height*0.99;
-//     			console.log(this.width,this.height)
-	// Note that default values may be set in the sgvizler object.
 	
 	var width =document.documentElement.clientWidth * 0.99   //- margin.right;
 	var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
 	console.log(width,height)
-//	    try {
-//	    	Q.onFail(errorQuery);
-//	    	Q.addListener('onFail',errorQuery);
+
+		if (this.ss.uri.toLowerCase().indexOf('poolparty') > -1){
 	    	Q.query(sparqlQueryString)
+	    	.endpointURL(this.ss.uri)
+	    	.endpointOutputFormat("xml")
+	    	.chartHeight(parseInt(height))
+	    	.chartWidth(parseInt(width))
+	    	.chartFunction("google.visualization.Table") 
+	        .draw(this.$.resultViz);
+		}else{
+			Q.query(sparqlQueryString)
 	    	.endpointURL(this.ss.uri)
 	    	.chartHeight(parseInt(height))
 	    	.chartWidth(parseInt(width))
 	    	.chartFunction("google.visualization.Table") 
-//	    	.getDataTable(mySuccessFunc, myFailFunc);
-	        .draw(this.$.resultViz);//.onFail(function(d){console.log(d)});
-//	    }
+	        .draw(this.$.resultViz);
+		}
 	this.async(this.getCount);
-// 			 mySuccessFunc = function (datatable) {
-//     		      /* Do what you want with the datatable */
-    		      
-//     		      this.columns=_.map(datatable.Pf,function(c){return c.label})
-//     		      var tmpData = [];
-//     		      for ( i = 0; i<datatable.Nf.length; i++){
-//     		    	  currntRow=[]
-//     		    	  for (j=0;j<datatable.Nf[i].c.length;j++){
-//     		    		  currntRow.push(datatable.Nf[i].c[j].v)
-//     		    	  }
-//     		    	  tmpData.push(currntRow)
-//     		      }
-//     			console.log(datatable)
-//     			console.log(tmpData)
-//     			this.data=tmpData;
-    		    
-//     		    }.bind(this),
-//     		    myFailFunc = function (datatable) {
-//     		      /* Handle the failue */
-//     		    	console.log(datatable)
-//     		    };
-    		
-//     		// Note that default values may be set in the sgvizler object.
-// //    	    try {
-// //    	    	Q.onFail(errorQuery);
-// //    	    	Q.addListener('onFail',errorQuery);
-//     	    	Q.query(sparqlQueryString)
-// //     	    	.chartHeight(parseInt(height*0.80))
-// //     	    	.chartWidth(parseInt(trueW*0.99))
-// //    	    	.chartFunction(charType) 
-//    	    	.getDataTable(mySuccessFunc, myFailFunc); 
-//     	        .draw("resultViz");//.onFail(function(d){console.log(d)});
-//    	    }
-//    	    catch(err) {
-//    	    	window.alert(err.message);
-//    	    	console.log(err.message);
-////    	        document.getElementById("demo").innerHTML = err.message;
-//    	    }
-
-
-
-    		
-    		
-    		
+	
     	},
 updateQueryPagin:function(){
     		
@@ -835,30 +769,25 @@ updateQueryPagin:function(){
 	var width =document.documentElement.clientWidth * 0.99   //- margin.right;
 	var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
 	console.log(width,height)
-//	    try {
-//	    	Q.onFail(errorQuery);
-//	    	Q.addListener('onFail',errorQuery);
+		if (this.ss.uri.toLowerCase().indexOf('poolparty') > -1){
 	    	Q.query(sparqlQueryString)
 	    	.endpointURL(this.ss.uri)
 	    	.chartHeight(parseInt(height))
 	    	.chartWidth(parseInt(width))
+		    .endpointOutputFormat("xml")
 	    	.chartFunction("google.visualization.Table") 
-//	    	.getDataTable(mySuccessFunc, myFailFunc);
-	        .draw(this.$.resultViz);//.onFail(function(d){console.log(d)});
+	        .draw(this.$.resultViz);
+	    	
+		}else{
+			Q.query(sparqlQueryString)
+	    	.endpointURL(this.ss.uri)
+	    	.chartHeight(parseInt(height))
+	    	.chartWidth(parseInt(width))
+	    	.chartFunction("google.visualization.Table") 
+	        .draw(this.$.resultViz);
+		}//.onFail(function(d){console.log(d)});
 
     		
-    	},
-    	dataChanged:function(){
-    		
-    		/* this.$.sortTable.columns=this.columns
-    		this.$.sortTable.data=this.data */
-    	},
-    	domReady:function(){
-//     		this.width=this.getBoundingClientRect().width*0.99;
-// 			this.height=this.getBoundingClientRect().height*0.99;
-// 			console.log(this.width,this.height)
-// 			console.log(this.$.principal.offsetWidth)
-// 			console.log(this.$.principal.offsetHeight)
     	},
     	getCount:function(){
     		this.count=-1;
@@ -883,8 +812,16 @@ updateQueryPagin:function(){
     		console.log(datatable)
     	  };
     	  try{
-    		  Qcount.query(stringQuery)
-        	  .getDataTable(mySuccessFunc, myFailFunc)
+    		  if (this.ss.uri.toLowerCase().indexOf('poolparty') > -1){
+    			  Qcount.query(stringQuery)
+        		  .endpointOutputFormat("xml")
+            	  .getDataTable(mySuccessFunc, myFailFunc)
+    		  }else{
+    			  Qcount.query(stringQuery)
+            	  .getDataTable(mySuccessFunc, myFailFunc)  
+    		  
+    		  }
+    		  
     		 }
     		 catch(e){
     		  alert('An error has occurred: '+e.message)
@@ -893,40 +830,47 @@ updateQueryPagin:function(){
     	  
     	},
     	launchCustomQuery:function(){
-    		var div = this.$.resultViz
-   	     while (div.hasChildNodes() && div.lastChild.id != "title") {
-    			div.removeChild(div.lastChild);
-    		}
-//    	     this.$.resSpinner.active=true
-   	     
-//    		console.log(this.editor)
-			var sparqlQueryString = this.editor.getDoc().getValue(),
-		    containerID = "resultViz",
-		    Q = new sgvizler.Query()
-
-//console.log(this.$.resultViz.offsetHeight)
-//	this.width=this.getBoundingClientRect().width*0.99;
-//    			this.height=this.getBoundingClientRect().height*0.99;
-//    			console.log(this.width,this.height)
-	// Note that default values may be set in the sgvizler object.
-	
-	var width =document.documentElement.clientWidth * 0.99   //- margin.right;
-	var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
-	console.log(width,height)
-//	    try {
-//	    	Q.onFail(errorQuery);
-//	    	Q.addListener('onFail',errorQuery);
-	    	Q.query(sparqlQueryString)
-	    	.endpointURL(this.ss.uri)
-	    	.chartHeight(parseInt(height))
-	    	.chartWidth(parseInt(width))
-	    	.chartFunction("google.visualization.Table") 
-//	    	.getDataTable(mySuccessFunc, myFailFunc);
-	        .draw(this.$.resultViz);//.onFail(function(d){console.log(d)});
-//	    }
-	this.count=null;
-	this.selected = 1;
-    	},
+		    		var div = this.$.resultViz
+		   	     while (div.hasChildNodes() && div.lastChild.id != "title") {
+		    			div.removeChild(div.lastChild);
+		    		}
+		//    	     this.$.resSpinner.active=true
+		   	     
+		//    		console.log(this.editor)
+					var sparqlQueryString = this.editor.getDoc().getValue(),
+				    containerID = "resultViz",
+				    Q = new sgvizler.Query()
+		
+		
+		
+			
+			var width =document.documentElement.clientWidth * 0.99   //- margin.right;
+			var height = (((document.documentElement.clientHeight - 64 ) * 0.70) - 48) *0.97
+			console.log(width,height)
+		
+			
+			
+			if (this.ss.uri.toLowerCase().indexOf('poolparty') > -1){
+				Q.query(sparqlQueryString)
+		    	.endpointURL(this.ss.uri)
+		    	.chartHeight(parseInt(height))
+		    	.chartWidth(parseInt(width))
+		    	.endpointOutputFormat("xml")
+		    	.chartFunction("google.visualization.Table") 
+		        .draw(this.$.resultViz);
+			}else{
+			    	Q.query(sparqlQueryString)
+			    	.endpointURL(this.ss.uri)
+			    	.chartHeight(parseInt(height))
+			    	.chartWidth(parseInt(width))
+			    	.chartFunction("google.visualization.Table") 
+			        .draw(this.$.resultViz);
+			    	
+			}
+		//	    }
+			this.count=null;
+			this.selected = 1;
+		    	},
     	ready:function(a){
     	 this.editor = CodeMirror.fromTextArea(this.$.code, {
     	        mode: "application/x-sparql-query",
@@ -941,11 +885,7 @@ updateQueryPagin:function(){
     		
     		this.width=this.getBoundingClientRect().width*0.99;
 			this.height=this.getBoundingClientRect().height*0.99;
-// 			console.log(this.width,this.height)
-// 			this.$.attMand.addEventListener('change', function () {
-// 			    this.curAttMandatoryChanged();
-// 			  }); 
-			
+
     	}
     	
     })
